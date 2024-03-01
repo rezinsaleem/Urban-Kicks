@@ -1,0 +1,144 @@
+<%- include('../partials/adminHead') -%>
+
+
+<style>
+    
+  .table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #001a4e;
+     
+  }
+  
+  .table th,
+  .table td {
+      padding: 8px;
+      text-align: center;
+  }
+  
+  .table th {
+      background-color: #343a40;
+      color: #fff;
+      font-weight: bold;
+  }
+  
+  .table tbody tr:nth-child(odd) {
+      background-color: #f2f2f2;
+  }
+  
+  .table-striped tbody tr:nth-child(odd) {
+      background-color: #f6f8fa;
+  }
+  
+  .table-striped tbody tr:nth-child(even) {
+      background-color: #e9ecef;
+  }
+  #block{
+      background-color: #3086d5;
+      color: white;
+  }
+      </style>
+
+
+
+  <main role="main" class="main-content">
+    <div class="container">
+      <div class="row my-4">
+        <div class="col-lg-12">
+         <a href="/admin/addproduct">
+       <button type="button" class="btn  mb-3" id="block">Add Product</button>
+      </a>
+          <div class="table-responsive">
+            <% if(product !="" ) { %>
+              <table class="table table-striped text-center my-3" id="myTable">
+                <thead>
+                  <tr class="table-dark">
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% product.forEach((row,index)=> { %>
+                    <tr class="align-middle">
+                      <td><%= index+1 %></td>
+                      <td>
+                        <img src="/<%= row.image[0] %>" width="55" class="img-thumbnail" alt="image">
+                      </td>
+                      <td><%= row.name %></td>
+                      <td><%= row.category ? row.category.name : 'N/A' %></td>
+                      <td><%= row.price %></td>
+                      <td><%= row.stock %></td>
+                      <td>
+                        <%= row.status ? 'Listed' : 'Unlisted' %>
+                      </td>
+                      <td>
+                        <a href="/admin/updateProduct/<%= row._id %>" class="text-success"><i
+                            class="fas fa-edit fa-lg mx-1"></i></a>
+                        <a onclick="confirmUnlist('<%= row._id %>')">
+                          <button class="btn btn-primary btn-sm" id="block">
+                          <%= row.status ? 'Unlist' : 'List' %>
+                          </button>
+                        </a>
+                      </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+              </table>
+              <% } else { %>
+                <h1 class="text-center text-secondary mt-5">No Product found in the database</h1>
+                <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+jQuery.noConflict();
+(function($) {
+    // $ refers to jQuery within this function
+    $(document).ready(function() {
+        $('#myTable').DataTable();
+    });
+})(jQuery);
+</script>
+
+<script>
+  function confirmUnlist(itemId) {
+  Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure you want to proceed?",
+      icon: "warning",
+      showCancelButton: true,  
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm",
+      cancelButtonText: "Cancel",  
+      dangerMode: true,
+  })
+  .then((result) => {
+      if (result.isConfirmed) {
+          window.location.href = "/admin/unlist/" + itemId;
+      } else {
+          console.log("User canceled");
+      }
+  });
+}
+</script>
+
+
+
+
+  <%- include('../partials/adminFooter') -%>

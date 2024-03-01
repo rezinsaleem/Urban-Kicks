@@ -1,0 +1,68 @@
+<%- include('../partials/adminHead') -%>
+<style>
+ 
+
+
+
+
+
+</style>
+
+<main role="main" class="main-content">
+  <div class="container form-container">
+    <h1 class="mb-4">Update Product Images</h1>
+    <form action="/admin/updateimg/<%= product._id %>" method="post" enctype="multipart/form-data">
+     <div class="my-3">
+      <% product.image.forEach(item => { %>
+        <img style="width: 120px; height: 120px; margin-left: 10px;" src="/<%= item %>"/>
+        <a href="/admin/deleteimg?pid=<%= product._id %>&filename=<%= item %>"
+          class="btn btn-danger btn-xs">Delete</a>
+      <% }) %>
+    </div>
+      <div class="mb-3">
+        <label for="image">Add new Image:</label>
+        <input type="file" class="form-control-file" id="image" name="image" accept="image/*" multiple >
+      </div>
+      <div id="imagePreview"></div>
+      <button type="submit" class="btn btn-primary">Save Image</button>
+</form>
+  </div>
+  <div id="flashdiv" class="text-center mt-4">
+    <% if (errorMessages && errorMessages.length> 0) { %>
+        <% errorMessages.forEach(message=> { %>
+          <p style="color:red;">
+            <%= message %>
+          </p>
+          <% }); %>
+            <% } %>
+  </div>
+</main>
+</div>
+
+<script>
+  document.getElementById("image").addEventListener("change", function () {
+    var files = this.files;
+    var imagePreview = document.getElementById("imagePreview");
+
+    imagePreview.innerHTML = "";
+
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        var img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.maxWidth = "150px";
+        img.style.maxHeight = "150px";
+        img.style.marginRight = "10px";
+        img.style.marginBottom = "10px";
+        imagePreview.appendChild(img);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+<%- include("../partials/adminFooter") -%>

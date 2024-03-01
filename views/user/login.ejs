@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <title>Urban Kicks Login Page</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form action="/signup" method="post" onsubmit="return validateEmail() &&validatePassword() && confirmPassword()">
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <a href="/auth/google" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="/auth/facebook" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>or use your email for registeration</span>
+                <input type="text" id="name" name="name" placeholder="Name" required>
+                <input type="email" id="email" name="email" placeholder="Email"     onkeyup="validateEmail()" required>
+                <span id="emailerrorsignup"></span>
+                <input type="password" id="password" name="password" placeholder="Password" onkeyup="validatePassword()" required>
+                <input type="password" id="confirm-password" placeholder="Confirm-Password" onkeyup="confirmPassword()" required>
+                <span id="passworderrorsignup"></span>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form action="/login" method="post" onsubmit="return validateEmail1() && validatePassword1()">
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="/auth/google" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="/auth/facebook" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>or use your email & password</span>
+                <input type="email" id="email1"  name="email" placeholder="Email"  onkeyup="validateEmail1()" required>
+                <span id="emailerrorsignin"></span>
+                <input type="password" id="password1" name="password" placeholder="Password" onkeyup="validatePassword1()" required>
+                <span id="passworderrorsignin"></span>
+                <a href="#">Forget Your Password?</a>
+                <button type="submit">Sign In</button>
+
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back !</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Welcome, Friend!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="flashdiv">
+            <% if (errorMessages && errorMessages.length> 0) { %>
+                <% errorMessages.forEach(message=> { %>
+                  <p style="color:red;">
+                    <%= message %>
+                  </p>
+                  <% }); %>
+                    <% } %>
+          
+                      <% if (successMessage) { %>
+                        <p style="color:green;">
+                          <%= successMessage %>
+                        </p>
+                        <% } %>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+         const registerBtn = document.getElementById('register');
+         const loginBtn = document.getElementById('login');
+
+        registerBtn.addEventListener('click', () => {
+        container.classList.add("active");
+});
+
+    loginBtn.addEventListener('click', () => {
+    container.classList.remove("active");
+});
+
+    function validateEmail() {
+                        var emailError = document.getElementById('emailerrorsignup');
+                        var email = document.getElementById('email').value;
+                        if (!email.match(/^[A-Za-z\._\-[0-9]+@[A-Za-z]+\.[a-z]{2,}$/)) {
+                            emailError.innerHTML = 'Email is invalid!'
+                            return false;
+                        } else {
+                            emailError.innerHTML = ''
+                            return true;
+                        }
+
+                    }
+                    function validatePassword() {
+                        var passwordError = document.getElementById('passworderrorsignup');
+                        var password = document.getElementById('password').value;
+
+                        if (!password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()-_+=<>?])[A-Za-z\d\S]{8,}$/)) {
+                            passwordError.innerHTML = 'Password must be atleast 8 characters with atleast one letter, one digit and one special character!'
+                            return false;
+                        } else {
+                            passwordError.innerHTML = '';
+                            return true;
+                        }
+                    } 
+
+              function confirmPassword(){
+                var password = document.getElementById('password').value;
+                var confirmPassword = document.getElementById('confirm-password').value;
+                var passwordError = document.getElementById('passworderrorsignup');
+
+                if (password !== confirmPassword) {
+                  passwordError.innerHTML = 'Password do not match!'
+                            return false;
+                        } else {
+                            passwordError.innerHTML = ''
+                            return true;
+                }
+              }
+
+
+              function validateEmail1() {
+                        var emailError = document.getElementById('emailerrorsignin');
+                        var email = document.getElementById('email1').value;
+                        if (!email.match(/^[A-Za-z\._\-[0-9]+@[A-Za-z]+\.[a-z]{2,}$/)) {
+                            emailError.innerHTML = 'Email is invalid!'
+                            return false;
+                        } else {
+                            emailError.innerHTML = ''
+                            return true;
+                        }
+
+                    }
+                    function validatePassword1() {
+                        var passwordError = document.getElementById('passworderrorsignin');
+                        var password = document.getElementById('password1').value;
+
+                        if (!password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()-_+=<>?])[A-Za-z\d\S]{8,}$/)) {
+                            passwordError.innerHTML = 'Password must be atleast 8 characters with atleast one letter, one digit and one special character!'
+                            return false;
+                        } else {
+                            passwordError.innerHTML = '';
+                            return true;
+                        }
+                    } 
+
+ </script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <title>Admin - Urban Kicks</title>
+    <style>
+      .toggle{
+        background: linear-gradient(to right, #afb5f9  , #119c5d);
+      }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+          <form action="/admin/adminlogin" method="post" onsubmit="return validateEmail1() && validatePassword1()">
+                <h1>Sign In</h1>
+                <span style="margin-top: 6px;"> use your email & password to signIn</span>
+                <input type="email" id="email1"  name="email" placeholder="Email"  onkeyup="validateEmail1()" required>
+                <span id="emailerrorsignin"></span>
+                <input type="password" id="password1" name="password" placeholder="Password" onkeyup="validatePassword1()" required>
+                <span id="passworderrorsignin"></span>
+                <a href="#">Forget Your Password?</a>
+                <button type="submit">Sign In</button>
+
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-right">
+                    <h1>Welcome, Admin!</h1>
+                    <p>sign-In to use all of site features</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="flashdiv">
+            <% if (errorMessages && errorMessages.length> 0) { %>
+                <% errorMessages.forEach(message=> { %>
+                  <p style="color:red;">
+                    <%= message %>
+                  </p>
+                  <% }); %>
+                    <% } %>
+                     
+    </div>
+    <script>
+              function validateEmail1() {
+                        var emailError = document.getElementById('emailerrorsignin');
+                        var email = document.getElementById('email1').value;
+                        if (!email.match(/^[A-Za-z\._\-[0-9]+@[A-Za-z]+\.[a-z]{2,}$/)) {
+                            emailError.innerHTML = 'Email is invalid!'
+                            return false;
+                        } else {
+                            emailError.innerHTML = ''
+                            return true;
+                        }
+
+                    }
+                    function validatePassword1() {
+                        var passwordError = document.getElementById('passworderrorsignin');
+                        var password = document.getElementById('password1').value;
+
+                        if (!password.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()-_+=<>?])[A-Za-z\d\S]{8,}$/)) {
+                            passwordError.innerHTML = 'Password must be atleast 8 characters with atleast one letter, one digit and one special character!'
+                            return false;
+                        } else {
+                            passwordError.innerHTML = '';
+                            return true;
+                        }
+                    } 
+
+ </script>
+</body>
+
+</html>
