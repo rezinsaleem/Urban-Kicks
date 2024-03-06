@@ -5,7 +5,7 @@ const isLoggedUser = async (req,res,next)=>{
  try{
   
   const user = await userCollection.findOne({_id: req.session.userId})
-  if(req.session.isAuth && user){
+  if(req.session.isAuth && user && user.is_blocked==false){
     next()
   }else{
     res.redirect('/login')
@@ -27,6 +27,33 @@ const isloggedOutUser = (req,res,next)=>{
     console.log(err);
 }
 }
+
+const forgot=async(req,res,next)=>{
+    try {
+        if(req.session.forgot){
+            next()
+        }else{
+            res.redirect('/')
+        }
+    } catch (err) {
+        console.log(err);
+        res.render('user/servererror')
+    }
+}
+
+const signed=async(req,res,next)=>{
+    try {
+        if(req.session.signup||req.session.forgot){
+            next()
+        }else{
+            res.redirect('/')
+        }
+    } catch (err) {
+        console.log(err);
+        res.render('user/servererror')
+    }
+}
+
 
 const adAuth = (req, res, next) => {
   try {
@@ -56,4 +83,4 @@ const adLogout = (req, res, next) => {
 }
 
 
-module.exports = {isLoggedUser,isloggedOutUser,adAuth,adLogout}
+module.exports = {isLoggedUser,isloggedOutUser,adAuth,adLogout,forgot,signed}

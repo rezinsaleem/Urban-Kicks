@@ -50,7 +50,7 @@ const LoadWomen = async (req,res)=>{
     try{
         const categoryId = '65e0d269f1a57ef5d2805770';
         const products = await productCollection.find({ status: true, category: categoryId })
-        res.render('user/men',{ title: "UrbanKicks-Women", products })
+        res.render('user/women',{ title: "UrbanKicks-Women", products })
     }catch(err){
         console.log(error.message);
         res.render('user/servererror')
@@ -206,8 +206,11 @@ const verifyotp = async (req, res) => {
         const expiry = userdb.expiry;
         console.log(otp);
         if (enteredotp == otp && expiry.getTime() >= Date.now()) {
-            user.isVerified = true;
+            // user.isVerified = true;
             try {
+                if(req.session.forgot){
+                    res.redirect('/newpassword')
+                }
                 if (req.session.signup) {
                     await userCollection.create(user);
 
@@ -285,6 +288,75 @@ const login = async (req, res) => {
     }
 };
 
+const LoadForgotPassword = async(req,res)=>{
+    try{
+        const emailExist = req.flash('emailExist')
+        res.render('user/forgot',{emailExist})
+    }catch(error){
+        console.log(error);
+        res.render('user/servererror')
+    }
+}
+
+const forgotPassword = async(req,res)=>{
+    try{
+        const email = req.body.gmail;
+        const emailExist=await userCollection.find({email})
+        console.log(email,emailExist);
+        if(emailExist[0].email =email){
+            req.session.forgot =true;
+            req.session.signup = false;
+            req.session.user = {email:email}
+
+            const otp = generateotp();
+
+            const currTime = Date.now();
+            const expTime = currTime + 60 * 1000;
+            await otpCollection.updateOne({ email: email }, { $set: { email: email, otp: otp, expiry: new Date(expTime) } }, { upsert: true });
+            await sendmail(email, otp);
+            res.redirect('/otp')
+        }else{
+            req.flash('emailExist','Email Already Exist')
+            res.redirect('/forgotpassword')
+        }
+    }catch(err){
+        console.log(err);
+        res.render('user/servererror')
+    }
+}
+
+
+const LoadNewPassword = async(req,res)=>{
+    try{
+        const passwordError = req.flash('passwordError')
+        res.render('user/newpassword',{passwordError})
+    }catch(err){
+        console.log(err);
+        res.render('user/servererror');
+    }
+}
+
+const newPassword = async(req,res) => {
+    try{
+        const password = req.body.password;
+        const cpassword = req.body.cpassword;
+        if(password===cpassword){
+            const hashedPassword = await bcrypt.hash(password,10);
+            const email=req.session.user.email;
+            await userCollection.updateOne({email:email},{password:hashedPassword});
+            req.session.forgot = false;
+            res.redirect('/')
+        }else{
+            req.flash('passwordError',"Password Does not match")
+            res.redirect('/newpassword')
+        }
+    }catch(err){
+        console.log(err);
+        res.render('user/servererror')
+    }
+}
+
+
 const LoadProfile = async (req, res) => {
     try {
 
@@ -356,6 +428,10 @@ module.exports = {
     LoadOtp,
     verifyotp,
     resendotp,
+    LoadForgotPassword,
+    forgotPassword,
+    LoadNewPassword,
+    newPassword,
     LoadProfile,
     logout,
     googleAuthentication,

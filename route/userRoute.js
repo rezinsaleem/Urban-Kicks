@@ -4,6 +4,7 @@ require("../oauth/facebookauth")
 const userRouter = express.Router()
 const Auth = require('../middleware/userAuth')
 const userController = require('../controller/userControllers/userController')
+const cartController = require('../controller/userControllers/cartController')
 
 
 userRouter.get('/auth/google',userController.googleAuthentication);
@@ -28,7 +29,15 @@ userRouter.post('/signup', userController.signup)
 
 userRouter.post("/login", userController.login)
 
-userRouter.get('/otp',userController.LoadOtp)
+userRouter.get("/forgotpassword",userController.LoadForgotPassword)
+
+userRouter.post('/forgotPassword',userController.forgotPassword)
+
+userRouter.get('/newpassword',Auth.forgot,userController.LoadNewPassword)
+
+userRouter.post('/newPassword',Auth.forgot,userController.newPassword)
+
+userRouter.get('/otp',Auth.signed,userController.LoadOtp)
 
 userRouter.post('/verifyotp',userController.verifyotp)
 
@@ -37,6 +46,10 @@ userRouter.get('/resendotp',userController.resendotp)
 userRouter.get('/profile',Auth.isLoggedUser,userController.LoadProfile)
 
 userRouter.get('/logout',userController.logout)
+
+
+//cart
+userRouter.get('/cart',Auth.isLoggedUser,cartController.showcart)
 
 
 module.exports = userRouter;
