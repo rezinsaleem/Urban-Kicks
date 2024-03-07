@@ -1,4 +1,19 @@
 <%- include('../partials/userHeader') -%>
+<style>
+	.product-entry {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-entry .prod-img {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-entry:hover .prod-img {
+    transform: scale(1.1);
+}
+</style>
 		
 	<div class="colorlib-loader"></div>
 

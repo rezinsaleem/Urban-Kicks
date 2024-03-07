@@ -23,6 +23,7 @@ adminRouter.get('/adlogout',Auth.adAuth , adminController.adLogout)
 adminRouter.get("/products",Auth.adAuth , productController.LoadProducts)
 
 adminRouter.get("/addproduct",Auth.adAuth , productController.LoadAddProduct)
+adminRouter.get('/getSubcategories',Auth.adAuth,productController.fetchSubcat)
 
 adminRouter.post('/addProduct',Auth.adAuth , upload.array('images'),productController.addProduct)
 
@@ -50,5 +51,16 @@ adminRouter.get('/updatecategory/:id',Auth.adAuth , categoryController.LoadUpdat
 
 adminRouter.post('/updateCategory/:id',Auth.adAuth , categoryController.updateCategory)
 
+adminRouter.get('/subcategory',Auth.adAuth,categoryController.LoadSubCategory)
+
+adminRouter.get('/addsubcategory',Auth.adAuth,categoryController.LoadAddSubCategory)
+
+adminRouter.post('/newsubcategory',Auth.adAuth,categoryController.addSubcategory)
+
+adminRouter.get('/unlistsubcat/:id',Auth.adAuth,categoryController.unlistSubCategory)
+
+adminRouter.get('/updatesubcategory/:id',Auth.adAuth,categoryController.LoadUpdateSubCategory)
+
+adminRouter.post('/updateSubCategory/:id',Auth.adAuth,categoryController.updateSubCategory)
 
 module.exports = adminRouter;

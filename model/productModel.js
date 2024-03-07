@@ -12,6 +12,11 @@ const productSchema = new mongoose.Schema(
             ref: 'categories',
             required: true,
           },
+        sub_category: {
+            type: Schema.Types.ObjectId,
+            ref: 'subcategories',
+            required: true,
+          },
         description: {
             type: String,
             required: true
@@ -20,10 +25,16 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: true
         },
-        stock: {
-            type: Number,
-            required: true
-        },
+        stock: [{
+            size: {
+              type: Number,
+              required: true,
+            },
+            quantity: {
+              type: Number,
+              required: true,
+            },
+          }],
         image: {
             type: Array,
             required: true,
@@ -31,6 +42,10 @@ const productSchema = new mongoose.Schema(
         status: {
             type: Boolean,
             default: true,
+        },
+        created: {
+            type: Date,
+            default: new Date()
         }
     }
 )

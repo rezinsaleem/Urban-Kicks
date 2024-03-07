@@ -37,6 +37,9 @@
       background-color: #3086d5;
       color: white;
   }
+  h2{
+    color: #3086d5;
+  }
       </style>
 
 
@@ -45,6 +48,7 @@
     <div class="container">
       <div class="row my-4">
         <div class="col-lg-12">
+          <h2 class="text-center mb-5">Product Management</h2>
          <a href="/admin/addproduct">
        <button type="button" class="btn  mb-3" id="block">Add Product</button>
       </a>
@@ -57,6 +61,7 @@
                     <th>Image</th>
                     <th>Name</th>
                     <th>Category</th>
+                    <th>Sub-category</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Status</th>
@@ -72,8 +77,18 @@
                       </td>
                       <td><%= row.name %></td>
                       <td><%= row.category ? row.category.name : 'N/A' %></td>
+                      <td><%= row.sub_category ? row.sub_category.name : 'N/A' %></td>
                       <td><%= row.price %></td>
-                      <td><%= row.stock %></td>
+                      <td>
+                        <select style="float:left;" onchange="updateStock(this, '<%= JSON.stringify(row.stock) %>','<%= index %>')">
+                            <option value="">Select Size</option>
+                            <% row.stock.forEach(item => { %>
+                                <option value="<%= item.size %>"><%= item.size %></option>
+                            <% }); %>
+                        </select>
+                        <div id="stock_<%= index %>" style="float:left; margin-left: 10px;"></div>
+                    </td>
+                    
                       <td>
                         <%= row.status ? 'Listed' : 'Unlisted' %>
                       </td>
@@ -113,6 +128,23 @@ jQuery.noConflict();
         $('#myTable').DataTable();
     });
 })(jQuery);
+</script>
+
+
+<script>
+     function updateStock(select, stockJson,rowIndex) {
+    const selectedSize = parseInt(select.value);
+    const stock = JSON.parse(stockJson); 
+    
+    const stockDiv = document.getElementById(`stock_${rowIndex}`);
+    const selectedStock = stock.find(item => item.size === selectedSize);
+    if (selectedStock) {
+        stockDiv.textContent = ` ${selectedStock.quantity}`;
+    } else {
+        stockDiv.textContent = 'No stock available for the selected size.';
+    }
+}
+
 </script>
 
 <script>

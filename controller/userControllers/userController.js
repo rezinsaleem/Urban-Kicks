@@ -290,8 +290,8 @@ const login = async (req, res) => {
 
 const LoadForgotPassword = async(req,res)=>{
     try{
-        const emailExist = req.flash('emailExist')
-        res.render('user/forgot',{emailExist})
+        const emailError = req.flash('emailError')
+        res.render('user/forgot',{emailError})
     }catch(error){
         console.log(error);
         res.render('user/servererror')
@@ -300,9 +300,13 @@ const LoadForgotPassword = async(req,res)=>{
 
 const forgotPassword = async(req,res)=>{
     try{
-        const email = req.body.gmail;
+        const email = req.body.email;
         const emailExist=await userCollection.find({email})
         console.log(email,emailExist);
+        if(emailExist.length === 0) {
+            req.flash('emailError', 'You are not a registered user!');
+            return res.redirect('/forgotpassword');
+        }
         if(emailExist[0].email =email){
             req.session.forgot =true;
             req.session.signup = false;
@@ -315,9 +319,6 @@ const forgotPassword = async(req,res)=>{
             await otpCollection.updateOne({ email: email }, { $set: { email: email, otp: otp, expiry: new Date(expTime) } }, { upsert: true });
             await sendmail(email, otp);
             res.redirect('/otp')
-        }else{
-            req.flash('emailExist','Email Already Exist')
-            res.redirect('/forgotpassword')
         }
     }catch(err){
         console.log(err);

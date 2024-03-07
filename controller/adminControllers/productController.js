@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const productCollection = require("../../model/productModel")
 const categoryCollection = require('../../model/categoryModel')
+const subcategoryCollection = require('../../model/subcatModel')
 
 
 const LoadProducts = async (req, res) => {
@@ -11,6 +12,9 @@ const LoadProducts = async (req, res) => {
     const product = await productCollection.find().populate({
       path: 'category',
       select: 'name'
+    }).populate({
+      path:'sub_category',
+      select:'name'
     })
     res.render('admin/products', { product })
   } catch (err) {
@@ -21,22 +25,51 @@ const LoadProducts = async (req, res) => {
 
 const LoadAddProduct = async (req, res) => {
   try {
-    const categories = await categoryCollection.find({})
-    res.render('admin/addProduct',{category:categories})
+    const categories = await categoryCollection.find({});
+    res.render('admin/addProduct', { category: categories });
   } catch (err) {
-    console.log(err)
-    res.render('user/servererror')
+    console.log(err);
+    res.render('user/servererror');
   }
-}
+};
+
+const fetchSubcat = async (req, res) => {
+  const categoryId = req.query.categoryId;
+  try {
+      const subcategories = await subcategoryCollection.find({ p_category: categoryId });
+      res.json(subcategories);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "An error occurred while fetching subcategories" });
+  }
+};
 
 const addProduct = async (req, res) => {
   try {
+  
     const product = new productCollection({
       name: req.body.name,
-      category: req.body.category,
+      category: req.body.parentCategory,
+      sub_category:req.body.subCategory,
       description: req.body.description,
       price: req.body.price,
-      stock: req.body.stock,
+      stock: [{
+        size: "6",
+        quantity: req.body.size6,
+    },
+    {
+        size: "7",
+        quantity: req.body.size7,
+    },
+    {
+        size: "8",
+        quantity: req.body.size8,
+    },
+    {
+        size: "9",
+        quantity: req.body.size9,
+    },
+    ],
       image: req.files.map(file => file.path),
     })
     await product.save()
@@ -80,7 +113,12 @@ const updateProduct = async (req, res) => {
     product.name = req.body.name
     product.description = req.body.description
     product.price = req.body.price
-    product.stock = req.body.stock
+    product.stock = [
+      { size: '6', quantity: req.body.size6 },
+      { size: '7', quantity: req.body.size7 },
+      { size: '8', quantity: req.body.size8 },
+      { size: '9', quantity: req.body.size9 }
+  ];
     await product.save();
     res.redirect('/admin/products')
   } catch (error) {
@@ -159,5 +197,5 @@ module.exports = {
   LoadEditImage,
   updateImage,
   deleteImage,
-
+  fetchSubcat,
 }

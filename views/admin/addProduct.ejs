@@ -1,4 +1,10 @@
 <%- include("../partials/adminHead") -%>
+<style>
+   h2{
+    color: #3086d5;
+  }
+</style>
+
 <main role="main" class="main-content">
   <div class="container mt-5">
     <h2 class="mb-4">Add Product</h2>
@@ -9,15 +15,23 @@
       </div>
       <div class="form-group">
         <label for="category">Category:</label>
-        <select class="form-select" id="category" name="category" required>
-          <option value="" disabled>Select Category</option>
-          <% category.forEach(category=> { %>
-            <option value="<%= category._id %>">
-              <%= category.name %>
-            </option>
+        <select class="form-select" id="parentCategory" name="parentCategory" required>
+            <option value="" disabled selected>Select Category</option>
+            <% category.forEach(category => { %>
+                <option value="<%= category._id %>">
+                    <%= category.name %>
+                </option>
             <% }); %>
         </select>
-      </div>
+    </div>
+      <div class="form-group">
+        <label for="subcategory">Sub Category:</label>
+        <select class="form-select" id="subCategory" name="subCategory" required>
+            <option value="" disabled selected>
+              Select sub Category
+            </option>
+        </select>
+    </div>
       <div class="form-group">
         <label for="description">Description:</label>
         <textarea class="form-control" id="description" name="description" required></textarea>
@@ -28,8 +42,18 @@
       </div>
       <div class="form-group">
         <label for="stock">Stock:</label>
-        <input type="number" class="form-control" id="stock" name="stock" min="0" required>
-      </div>
+        <div class="mb-3 d-flex">
+            <label for="size6" class="form-label ml-2">Size 6:</label>
+            <input type="number" class="form-control ml-3" id="size6" name="size6" min="0" required>
+            <label for="size7" class="form-label ml-2">Size 7:</label>
+            <input type="number" class="form-control ml-3" id="size7" name="size7" min="0" required>
+            <label for="size8" class="form-label ml-2">Size 8:</label>
+            <input type="number" class="form-control ml-3" id="size8" name="size8" min="0" required>
+            <label for="size9" class="form-label ml-2">Size 9:</label>
+            <input type="number" class="form-control ml-3" id="size9" name="size9" min="0" required>
+        </div>
+    </div>
+    
       <div class="form-group">
         <label for="image">Image:</label>
         <input type="file" class="form-control-file" id="image" name="images" accept="image/*" multiple required>
@@ -41,6 +65,40 @@
 </main>
 </div>
 
+<script>
+  document.getElementById("parentCategory").addEventListener("change", function() {
+    var selectedCategoryId = this.value;
+    loadSubcategories(selectedCategoryId);
+});
+
+function loadSubcategories(selectedCategoryId) {
+    fetch(`/admin/getSubcategories?categoryId=${selectedCategoryId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch subcategories");
+            }
+            return response.json();
+        })
+        .then(subcategories => {
+            populateSubcategoryDropdown(subcategories);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+function populateSubcategoryDropdown(subcategories) {
+    var subCategorySelect = document.getElementById("subCategory");
+    subCategorySelect.innerHTML = '<option value="" disabled selected>Select sub Category</option>';
+    subcategories.forEach(subcategory => {
+        var option = document.createElement("option");
+        option.value = subcategory._id;
+        option.textContent = subcategory.name;
+        subCategorySelect.appendChild(option);
+    });
+}
+
+</script>
 
   <script>
     document.getElementById("image").addEventListener("change", function() {

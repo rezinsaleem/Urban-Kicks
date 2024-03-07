@@ -1,7 +1,9 @@
 <%- include('../partials/adminHead') -%>
 <style>
  
-
+ h2{
+    color: #3086d5;
+  }
 
 
 
@@ -10,7 +12,7 @@
 
 <main role="main" class="main-content">
   <div class="container form-container">
-    <h1 class="mb-4">Update Product Images</h1>
+    <h2 class="mb-4">Update Product Images</h2>
     <form action="/admin/updateimg/<%= product._id %>" method="post" enctype="multipart/form-data">
      <div class="my-3">
       <% product.image.forEach(item => { %>

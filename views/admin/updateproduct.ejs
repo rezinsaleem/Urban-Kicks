@@ -1,4 +1,10 @@
 <%- include('../partials/adminHead') -%>
+<style>
+   h2{
+    color: #3086d5;
+  }
+</style>
+
 
 <main role="main" class="main-content">
   <div class="container mt-5">
@@ -20,7 +26,16 @@
       </div>
       <div class="form-group">
         <label for="stock">Stock:</label>
-        <input type="number" class="form-control" id="stock" name="stock"  value="<%= product.stock %>" min="0" required>
+        <div class="mb-3 d-flex">
+            <label for="size6" class="form-label ml-2">Size 6:</label>
+            <input type="number" class="form-control ml-3" id="productName" value="<%= product.stock[0].quantity %>" name="size6" min="0" required>
+            <label for="size7" class="form-label ml-2">Size 7:</label>
+            <input type="number" class="form-control ml-3" id="productName" value="<%= product.stock[1].quantity %>" name="size7" min="0" required>
+            <label for="size8" class="form-label ml-2">Size 8:</label>
+            <input type="number" class="form-control ml-3" id="productName" value="<%= product.stock[2].quantity %>" name="size8" min="0" required>
+            <label for="size9" class="form-label ml-2">Size 9:</label>
+            <input type="number" class="form-control ml-3" id="productName" value="<%= product.stock[3].quantity %>" name="size9" min="0" required>
+        </div>
       </div>
       <div class="form-group mb-4">
         <label for="image">Image:</label><br>

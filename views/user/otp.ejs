@@ -72,14 +72,15 @@
                 <input type="text" id="digit4" name="digit4" maxlength="1" class="form-control" pattern="[0-9]"
                     required>
             </div>
-            <button type="submit" id="verifybtn" class="btn mt-3">Verify</button>
-
+            <button type="submit" id="verifybtn" class="btn mt-3 mb-2">Verify</button>
+           <p class="text-danger mt-2">
             <% if(expressFlash.otperror){%>
                 <div class="alter text-danger text-start">
                     <%=expressFlash.otperror%>
                 </div>
 
                 <%}%>
+            </p>
         </form>
         <div class="resend-timer">
             <a href="/resendotp" id="resend-btn" style="display: none;">Resend OTP</a>
