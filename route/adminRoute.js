@@ -4,6 +4,7 @@ const Auth = require("../middleware/userAuth")
 const adminController = require("../controller/adminControllers/adminController")
 const productController = require("../controller/adminControllers/productController")
 const categoryController = require('../controller/adminControllers/categoryController')
+const orderController = require('../controller/adminControllers/orderController')
 
 const multer = require("multer")
 const upload=multer({dest:'uploads/'})
@@ -62,5 +63,8 @@ adminRouter.get('/unlistsubcat/:id',Auth.adAuth,categoryController.unlistSubCate
 adminRouter.get('/updatesubcategory/:id',Auth.adAuth,categoryController.LoadUpdateSubCategory)
 
 adminRouter.post('/updateSubCategory/:id',Auth.adAuth,categoryController.updateSubCategory)
+
+adminRouter.get('/orders',Auth.adAuth,orderController.LoadOrder)
+adminRouter.post('/updateOrderStatus',Auth.adAuth, orderController.orderstatus)
 
 module.exports = adminRouter;

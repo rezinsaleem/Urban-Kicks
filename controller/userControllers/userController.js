@@ -1,6 +1,8 @@
 const userCollection = require('../../model/userModel');
 const otpCollection = require('../../model/userOtpModel')
 const productCollection = require('../../model/productModel')
+const categoryCollection = require('../../model/categoryModel')
+const subcatCollection = require('../../model/subcatModel')
 const bcrypt = require('bcrypt')
 const otpgenerator = require('otp-generator')
 const nodemailer = require('nodemailer')
@@ -23,45 +25,46 @@ const LoadSignIn = async (req, res) => {
 
 const LoadHome = async (req, res) => {
     try {
+        const currentPage = 'home';
+        const categories = await categoryCollection.find({status:true}).limit(3)
         const products = await productCollection.find({ status: true }).limit(12)
         if (req.user) {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
         }
-        res.render('user/home', { title: "UrbanKicks-Home", products })
+        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage})
     } catch (error) {
         console.log(error.message);
         res.render('user/servererror')
     }
 }
 
-const LoadMen = async (req,res)=>{
-    try{
-        const categoryId ='65e0d23bf1a57ef5d280576c';
+const LoadShop = async (req, res) => {
+    try {
+        
+        const categories = await categoryCollection.find({status:true}).limit(3)
+        const categoryId = req.params.id;
+        const currentPage = categoryId;
+        const category = await categoryCollection.findById(categoryId)
         const products = await productCollection.find({ status: true, category: categoryId })
-        res.render('user/men',{ title: "UrbanKicks-Men", products })
+        const subcategories = await subcatCollection.find({ p_category: categoryId, status: true}).populate('p_category');
+
+         console.log(category.name)
+        res.render('user/shop', {  subcategories, products ,category ,categories,currentPage});
     } catch (error) {
         console.log(error.message);
-        res.render('user/servererror')
+        res.render('user/servererror');
     }
-}
+};
 
-const LoadWomen = async (req,res)=>{
-    try{
-        const categoryId = '65e0d269f1a57ef5d2805770';
-        const products = await productCollection.find({ status: true, category: categoryId })
-        res.render('user/women',{ title: "UrbanKicks-Women", products })
-    }catch(err){
-        console.log(error.message);
-        res.render('user/servererror')
-    }
-}
+
 
 const shopSingle = async (req, res) => {
     try {
+        const categories = await categoryCollection.find({status:true}).limit(3)
         const productId = req.params.id;
         const product = await productCollection.findById(productId); 
-        res.render('user/product-detail',{product});
+        res.render('user/product-detail',{product,categories});
     } catch (error) {
         console.log(error);
         res.render('user/servererror');
@@ -358,20 +361,6 @@ const newPassword = async(req,res) => {
 }
 
 
-const LoadProfile = async (req, res) => {
-    try {
-
-        const id = req.session.userId;
-        const user = await userCollection.findOne({ _id: id })
-        const name = user.name;
-        const email = user.email;
-        res.render('user/user-profile', { title: "User-Profile", name, email })
-    } catch (err) {
-        console.log(err)
-        res.render('user/servererror')
-
-    }
-}
 
 
 const logout = async (req, res) => {
@@ -421,8 +410,7 @@ const facebookCallback = passport.authenticate('facebook', {
 module.exports = {
     LoadSignIn,
     LoadHome,
-    LoadMen,
-    LoadWomen,
+    LoadShop,
     shopSingle,
     signup,
     login,
@@ -433,7 +421,6 @@ module.exports = {
     forgotPassword,
     LoadNewPassword,
     newPassword,
-    LoadProfile,
     logout,
     googleAuthentication,
     googleCallback,

@@ -13,6 +13,7 @@
 .product-entry:hover .prod-img {
     transform: scale(1.1);
 }
+    
 </style>
 		
 	<div class="colorlib-loader"></div>
@@ -34,21 +35,22 @@
 			            </form>
 			         </div>
 		         </div>
-					<div class="row">
-						<div class="col-sm-12 text-left menu-1">
-							<ul>
-								<li class="active"><a href="/">Home</a></li>
-								<li><a href="/men">Men</a></li>
-								<li><a href="/women">Women</a></li>
-								<li><a href="/about">About</a></li>
-								<li><a href="/contact">Contact</a></li>
-								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
-								<li class="wishlist"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
-								<li class="user-profile"><a href="/profile"><i class="icon-user2"></i></a></li>
-						   
-							</ul>
+						 <div class="row">
+							<div class="col-sm-12 text-left menu-1">
+								<ul>
+									<li class="<%= currentPage === 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
+									<% categories.forEach(category => { %>
+										<li class="<%= currentPage === category.id ? 'active' : '' %>"><a href="/shop/<%= category.id %>"><%= category.name %></a></li>
+								<% }); %>
+									<li class="<%= currentPage === 'about' ? 'active' : '' %>"><a href="/about">About</a></li>
+									<li class="<%= currentPage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact</a></li>
+									<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+									<li class="wishlist <%= currentPage === 'wishlist' ? 'active' : '' %>"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
+									<li class="user-profile <%= currentPage === 'profile' ? 'active' : '' %>"><a href="/profile"><i class="icon-user2"></i></a></li>
+								 
+								</ul>
+							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 			<div class="sale">
@@ -88,7 +90,7 @@
 					   					<h2 class="head-2">Shoes</h2>
 					   					<h2 class="head-3">Collection</h2>
 					   					<p class="category"><span>New trending shoes</span></p>
-					   					<p><a href="/men" class="btn btn-primary">Shop Collection</a></p>
+					   					<p><a href="" class="btn btn-primary">Shop Collection</a></p>
 				   					</div>
 				   				</div>
 				   			</div>
@@ -145,26 +147,21 @@
 		</div>
 		<div class="colorlib-product">
 			<div class="container-fluid">
-				<div class="row">
-					<div class="col-sm-6 text-center">
-						<div class="featured">
-							<a href="#" class="featured-img" style="background-image: url(images/men.jpg);"></a>
-							<div class="desc">
-								<h2><a href="/men">Shop Men's Collection</a></h2>
-							</div>
-						</div>
+					<div class="row">
+							<% categories.forEach(category => { %> 
+									<div class="col-sm-6 text-center">
+											<div class="featured">
+													<a href="/shop/<%= category._id %>" class="featured-img" style="background-image: url(images/<%=category.name%>.jpg);"></a>
+													<div class="desc">
+															<h2><a href="/shop/<%= category._id %>">Shop <%= category.name %>'s Collection</a></h2>
+													</div>
+											</div>
+									</div>
+							<% }); %>
 					</div>
-					<div class="col-sm-6 text-center">
-						<div class="featured">
-							<a href="#" class="featured-img" style="background-image: url(images/women.jpg);"></a>
-							<div class="desc">
-								<h2><a href="/women">Shop Women's Collection</a></h2>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
-		</div>
+	</div>
+	
 
 		<div class="colorlib-product">
 			<div class="container">

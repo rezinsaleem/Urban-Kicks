@@ -1,0 +1,109 @@
+<%- include('../partials/adminHead') -%>
+
+  <main role="main" class="main-content">
+    <div class="container-fluid">
+      <div class="row my-4">
+        <!-- <div class="col-lg-12">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search..." id="searchInput">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+          </div>
+        </div> -->
+        <div class="col-lg-12 mt-4 mb-4">
+          <h2 class="text-center mb-5" style="color: #3086d5;">Order Management</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
+              <thead class="thead-dark text-center">
+                <tr>
+                  <th>Order ID</th>
+                  <th>User ID</th>
+                  <th>Products</th>
+                  <th>Delivery Address</th>
+                  <th>Payment</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Order Date</th>
+                </tr>
+              </thead>
+              <tbody class="text-center" style="background-color: white; font-size: small;">
+                <% if(order && order.length> 0) { %>
+                  <% order.forEach(function(data) { %>
+                    <tr>
+                      <td>
+                        <%= data.orderId %>
+                      </td>
+                      <td>
+                        <%= data.userId %>
+                      </td>
+                      <td>
+                        <% data.items.forEach(function(items){ %>
+                          <%= items.productId.description %><br>
+                            <%= items.quantity %>
+                              <br>
+                              <% }); %>
+                      </td>
+                      <td>
+                        <%= data.address[0].save_as %>,
+                          <%= data.address[0].housename %>,
+                            <br>
+                            <%= data.address[0].city %>,
+                              <%= data.address[0].pincode %>
+                      </td>
+                      <td>
+                        <%= data.payment %>
+                      </td>
+                      <td>
+                        <%= data.amount %>
+                      </td>
+                      <td>
+                        <form action="/admin/updateOrderStatus" method="post"
+                        id="orderStatusForm_<%= data._id %>">
+                        <input type="hidden" name="orderId" value="<%= data._id %>">
+                        <label for="status"></label>
+                        <% if(data.status==='Cancelled' ) {%>
+                            <span>Cancelled</span>
+                            <% }else if(data.status=='returned'){ %>
+                                <span>Returned</span>
+                            <% }else{ %>
+                                <select name="status" id="status"
+                                onchange="submitForm('<%= data._id %>')">
+                                <% const statuses=['pending', 'processing' , 'shipped' , 'delivered'
+                                ,'Cancelled','returned']; %>
+                                <% for (const status of statuses) { %>
+                                            <option value="<%= status %>"
+                                                <%=data.status===status ? 'selected' : '' %>><%=
+                                                    status.charAt(0).toUpperCase() +
+                                                    status.slice(1) %>
+                                            </option>
+                                            <% } %>
+                                        </select>
+                                <% } %>
+                    </form>
+                      </td>
+                      <td>
+                        <%= data.createdAt.toLocaleString('en-US', { year: 'numeric' , month: 'short' , day: 'numeric' ,
+                          hour: 'numeric' , minute: 'numeric' , second: 'numeric' , hour12: false }) %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="8">No results found.</td>
+                        </tr>
+                        <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+
+  <script>
+    function submitForm(orderId) {
+      document.getElementById(`orderStatusForm_${orderId}`).submit();
+    }
+  </script>
+
+  <%- include('../partials/adminFooter') -%>

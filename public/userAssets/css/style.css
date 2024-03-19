@@ -8848,3 +8848,18 @@ input[type="text"] {
 
 .js .animate-box {
   opacity: 0; }
+
+
+  .product-entry {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-entry .prod-img {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-entry:hover .prod-img {
+    transform: scale(1.1);
+}

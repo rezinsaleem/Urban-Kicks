@@ -82,5 +82,18 @@ const adLogout = (req, res, next) => {
   }
 }
 
+const checkoutValid=async(req,res,next)=>{
+    try{
+        if(req.session.checkout){
+            next()
+        }else{
+            res.redirect('/login')
+        }
+    } catch (err) {
+        console.log(err);
+        res.render('user/serverError')
+    }
+}
 
-module.exports = {isLoggedUser,isloggedOutUser,adAuth,adLogout,forgot,signed}
+
+module.exports = {isLoggedUser,isloggedOutUser,adAuth,adLogout,forgot,signed,checkoutValid}

@@ -1,4 +1,19 @@
 <%- include('../partials/userHeader') -%>
+<style>
+	.product-entry {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-entry .prod-img {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-entry:hover .prod-img {
+    transform: scale(1.1);
+}
+</style>
 		
 	<div class="colorlib-loader"></div>
 
@@ -121,6 +136,20 @@
 				<div class="row">
 					<div class="col-lg-3 col-xl-3">
 						<div class="row">
+
+							<div class="col-sm-12">
+								<div class="side border mb-1">
+									<h3>Sort by :</h3>
+									<ul>
+										<li><a href="#">Price: low to high</a></li>
+										<li><a href="#">Price : high to low </a></li>
+										<li><a href="#">aA - zZ</a></li>
+										<li><a href="#">zZ - aA </a></li>
+										<li><a href="#">New arrivals</a></li>
+									</ul>
+								</div>
+							</div>
+
 							<div class="col-sm-12">
 								<div class="side border mb-1">
 									<h3>Brand</h3>
@@ -133,7 +162,8 @@
 									</ul>
 								</div>
 							</div>
-							<div class="col-sm-12">
+							
+							<!-- <div class="col-sm-12">
 								<div class="side border mb-1">
 									<h3>Size/Width</h3>
 									<div class="block-26 mb-2">
@@ -164,20 +194,9 @@
 					               </ul>
 					            </div>
 								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="side border mb-1">
-									<h3>Style</h3>
-									<ul>
-										<li><a href="#">Slip Ons</a></li>
-										<li><a href="#">Boots</a></li>
-										<li><a href="#">Sandals</a></li>
-										<li><a href="#">Lace Ups</a></li>
-										<li><a href="#">Oxfords</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-sm-12">
+							</div> -->
+						
+							<!-- <div class="col-sm-12">
 								<div class="side border mb-1">
 									<h3>Colors</h3>
 									<ul>
@@ -192,8 +211,9 @@
 										<li><a href="#">Brown</a></li>
 									</ul>
 								</div>
-							</div>
-							<div class="col-sm-12">
+							</div> -->
+							
+							<!-- <div class="col-sm-12">
 								<div class="side border mb-1">
 									<h3>Material</h3>
 									<ul>
@@ -201,8 +221,9 @@
 										<li><a href="#">Suede</a></li>
 									</ul>
 								</div>
-							</div>
-							<div class="col-sm-12">
+							</div> -->
+							
+							<!-- <div class="col-sm-12">
 								<div class="side border mb-1">
 									<h3>Technologies</h3>
 									<ul>
@@ -211,7 +232,8 @@
 										<li><a href="#">FlexBevel</a></li>
 									</ul>
 								</div>
-							</div>
+							</div> -->
+
 						</div>
 					</div>
 					<div class="col-lg-9 col-xl-9">
