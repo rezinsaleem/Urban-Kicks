@@ -27,9 +27,9 @@
 							<div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
+			            <form action="/" id="searchForm" class="search-wrap">
 			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
+			                  <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" value="<%= searchQuery %>" >
 			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
 			               </div>
 			            </form>
@@ -171,21 +171,28 @@
 					</div>
 				</div>
 				<div class="row row-pb-md">
-					<% products.forEach(product => { %>
-						<div class="col-lg-3 mb-4 text-center">
-							<div class="product-entry border">
-								<a href="/shopSingle/<%= product._id %>" class="prod-img">
-									<img src="<%= product.image[0] %>" class="img-fluid" alt="<%= product.name %>">
-								</a>
-								<div class="desc">
-									<h2><a href="/shopSingle/<%= product._id %>"><%= product.name %></a></h2>
-									<p><%= product.description %></p>
-									<span class="price">$<%= product.price %></span>
-								</div>
-							</div>
-						</div>
-					<% }); %>
-				</div>
+					<% if (products.length > 0) { %>
+							<% products.forEach(product => { %>
+									<div class="col-lg-3 mb-4 text-center">
+											<div class="product-entry border">
+													<a href="/shopSingle/<%= product._id %>" class="prod-img">
+															<img src="<%= product.image[0] %>" class="img-fluid" alt="<%= product.name %>">
+													</a>
+													<div class="desc">
+															<h2><a href="/shopSingle/<%= product._id %>"><%= product.name %></a></h2>
+															<p><%= product.description %></p>
+															<span class="price">$<%= product.price %></span>
+													</div>
+											</div>
+									</div>
+							<% }); %>
+					<% } else { %>
+							<h3 class="text-center ml-5" style="color: #585757; margin-top: 20px; margin-bottom: 50px;">
+									No matching results found. <a href="/" class="text-primary">Explore our products</a> and add new kicks to your collection!
+							</h3>
+					<% } %>			
+			</div>
+			
 				<div class="row">
 					<div class="col-md-12 text-center">
 						<p><a href="#" class="btn btn-primary btn-lg">Shop All Products</a></p>

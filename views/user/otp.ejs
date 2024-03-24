@@ -12,7 +12,7 @@
             margin: auto;
             margin-top: 120px;
             padding: 20px;
-            border: 0.7px solid #848383;
+            border: 0.5px solid #848383;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
             background: linear-gradient(to right, #afb5f9, #1D2671);
@@ -39,8 +39,8 @@
             margin-top: 20px;
         }
 
-        #timer{
-            color:rgb(251, 251, 253);
+        #timer {
+            color: rgb(251, 251, 253);
         }
 
         h2 {
@@ -73,13 +73,13 @@
                     required>
             </div>
             <button type="submit" id="verifybtn" class="btn mt-3 mb-2">Verify</button>
-           <p class="text-danger mt-2">
-            <% if(expressFlash.otperror){%>
-                <div class="alter text-danger text-start">
-                    <%=expressFlash.otperror%>
-                </div>
+            <p class="text-danger mt-2">
+                <% if(expressFlash.otperror){%>
+                    <div class="alter text-danger text-start">
+                        <%=expressFlash.otperror%>
+                    </div>
 
-                <%}%>
+                    <%}%>
             </p>
         </form>
         <div class="resend-timer">

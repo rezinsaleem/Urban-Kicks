@@ -10,15 +10,19 @@ const categoryschema = new mongoose.Schema({
         type: String,
         required: true
     },
+    discount:{
+        type:Number,
+        required:true,
+    },
     types: {
       type: Array,
       default: ['All']
-  },
-  status: {
+    },
+    status: {
       type: Boolean,
       required: true,
       default: true
-  }
+    }
 })
 
 

@@ -79,6 +79,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 </div>
 
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        const searchInput = document.getElementById('searchInput').value.trim();
+        if (!searchInput) {
+            event.preventDefault(); 
+        }
+    });
+</script>
+
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
 <!-- popper -->

@@ -8,6 +8,8 @@ const productCollection = require('../../model/productModel')
 
 const LoadCheckOut = async(req,res)=>{
   try {
+    const successMessages  = req.flash('success')
+    const errorMessages = req.flash('error')
     const currentPage = 'cart';
     const userId = req.session.userId;
     req.session.checkoutSave=true;
@@ -31,7 +33,7 @@ if (data.item.length == 0) {
     return res.redirect('/cart')
 }
 
-    res.render('user/checkout',{title:"Urbankicks - checkout ",address,data,categories,currentPage})
+    res.render('user/checkout',{title:"Urbankicks - checkout ",address,data,categories,currentPage,successMessages,errorMessages})
   } catch (error) {
     console.log(error)
     res.render("user/servererror")

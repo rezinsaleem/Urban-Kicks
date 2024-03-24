@@ -44,9 +44,9 @@ const addtocart = async (req, res) => {
         productId,
         stock: selectedStock.quantity,
         size: size,
-        quantity,
+        quantity: parseInt(quantity, 10),
         price,
-        total: quantity * price
+        total: Nquantity * price
       });
     }
 

@@ -57,10 +57,7 @@
 .quantity-left-minus:hover, .quantity-right-plus:hover {
     background-color: #9e9e9e; 
 }	
-/* .text-center {
-    display: flex;
-    justify-content: center;
-} */
+
 </style>
 	</head>
 	<body>
@@ -76,12 +73,12 @@
 							<div id="colorlib-logo"><a href="/home">Urban Kicks</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
+							<form action="/" id="searchForm" class="search-wrap">
+								<div class="form-group">
+									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
+									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+								</div>
+						 </form>
 			         </div>
 		         </div>
 						 <div class="row">
@@ -206,12 +203,19 @@
                          </button>
                      	</span>
                   	</div>
+										<% if(pass&&pass.length>0){%>
+											<div style="color: red; font-size: 16px; font-weight: bold;">
+													<%= pass%>
+											</div>
+											    <%}%>
                   	<div class="row">
-	                  	<div class="col-sm-12 text-center" >
+	                  	<div class="col-sm-12 text-center d-flex" >
 												<button type="submit" class="btn btn-primary btn-addtocart"  style="display: flex;">
 													<i class="icon-shopping-cart"></i> Add to Cart
 											</button>
-											
+											<button class="btn btn-primary btn-addtocart w-75" id="addToWishlistBtn" style="display: flex;">
+												<i class="icon-heart2"></i> Add to Wishlist
+										</button>
 								</div>
 							</div>
 							</form>
@@ -472,6 +476,15 @@
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
+
+	<script>
+		document.getElementById('searchForm').addEventListener('submit', function(event) {
+				const searchInput = document.getElementById('searchInput').value.trim();
+				if (!searchInput) {
+						event.preventDefault(); 
+				}
+		});
+	</script>
 	
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<!-- jQuery -->
@@ -558,6 +571,31 @@
 		return true;
 	}
 </script>
+
+<script>
+	document.getElementById('addToWishlistBtn').addEventListener('click', function(event) {
+		event.preventDefault(); 
+	
+		var productId = '<%= product._id %>'; 
+		var selectedSize = document.querySelector('input[name="size"]:checked'); 
+	
+		if (!selectedSize) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please select a size.',
+			});
+			return;
+		}
+	
+		var sizeValue = selectedSize.value; 
+		var url = '/addtowishlist/<%= product._id %>'; 
+	
+		url += '?size=' + encodeURIComponent(sizeValue);
+
+		window.location.href = url;
+	});
+	</script>
 
 
 	</body>

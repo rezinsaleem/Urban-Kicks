@@ -1,115 +1,427 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-	<title>Urban Kicks - edit address</title>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
-	
-	<!-- Animate.css -->
-	<link rel="stylesheet" href="/css/animate.css">
-	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="/css/icomoon.css">
-	<!-- Ion Icon Fonts-->
-	<link rel="stylesheet" href="/css/ionicons.min.css">
-	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+<head>
+    <title>Urban Kicks - edit address</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Magnific Popup -->
-	<link rel="stylesheet" href="/css/magnific-popup.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 
-	<!-- Flexslider  -->
-	<link rel="stylesheet" href="/css/flexslider.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <!-- Ion Icon Fonts-->
+    <link rel="stylesheet" href="/css/ionicons.min.css">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/css/owl.theme.default.min.css">
-	
-	<!-- Date Picker -->
-	<link rel="stylesheet" href="/css/bootstrap-datepicker.css">
-	<!-- Flaticons  -->
-	<link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
 
-	<!-- Theme style  -->
-	<link rel="stylesheet" href="/css/style.css">
+    <!-- Flexslider  -->
+    <link rel="stylesheet" href="/css/flexslider.css">
 
-	<!-- magic zoom -->
-	<link rel="stylesheet" href="/css/magiczoom.css">
-	<script src="/js/magiczoom.js"></script>
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
 
-	</head>
-	<body>
-		
-	<div class="colorlib-loader"></div>
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
+    <!-- Flaticons  -->
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
 
-	<div id="page">
-		<nav class="colorlib-nav" role="navigation">
-			<div class="top-menu">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
-						</div>
-						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
-			         </div>
-		         </div>
-						 <div class="row">
-							<div class="col-sm-12 text-left menu-1">
-								<ul>
-									<li><a href="/">Home</a></li>
-									<% categories.forEach(category => { %>
-										<li><a href="/shop/<%= category.id %>"><%= category.name %></a></li>
-								<% }); %>
-									<li><a href="/about">About</a></li>
-									<li><a href="/contact">Contact</a></li>
-									<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
-									<li class="wishlist"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
-									<li class="user-profile"><a href="/profile"><i class="icon-user2"></i></a></li>
-								 
-								</ul>
-							</div>
-						</div>
-				</div>
-			</div>
-			<div class="sale">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-8 offset-sm-2 text-center">
-							<div class="row">
-								<div class="owl-carousel2">
-									<div class="item">
-										<div class="col">
-											<h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
-										</div>
-									</div>
-									<div class="item">
-										<div class="col">
-											<h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
-										</div>
-									</div>
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- magic zoom -->
+    <link rel="stylesheet" href="/css/magiczoom.css">
+    <script src="/js/magiczoom.js"></script>
+
+</head>
+
+<body>
+
+    <div class="colorlib-loader"></div>
+
+    <div id="page">
+        <nav class="colorlib-nav" role="navigation">
+            <div class="top-menu">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-7 col-md-9">
+                            <div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
+                        </div>
+                        <div class="col-sm-5 col-md-3">
+                            <form action="/" id="searchForm" class="search-wrap">
+								<div class="form-group">
+									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
+									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
+						 </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-left menu-1">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <% categories.forEach(category=> { %>
+                                    <li><a href="/shop/<%= category.id %>">
+                                            <%= category.name %>
+                                        </a></li>
+                                    <% }); %>
+                                        <li><a href="/about">About</a></li>
+                                        <li><a href="/contact">Contact</a></li>
+                                        <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+                                        <li class="wishlist"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
+                                        <li class="user-profile"><a href="/profile"><i class="icon-user2"></i></a></li>
 
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread"><span><a href="/">Home</a></span> / <span>Edit Address</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sale">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-2 text-center">
+                            <div class="row">
+                                <div class="owl-carousel2">
+                                    <div class="item">
+                                        <div class="col">
+                                            <h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="col">
+                                            <h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
+        <div class="breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p class="bread"><span><a href="/">Home</a></span> / <span>Edit Address</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="container" style="max-width: 800px;">
+            <div class="cart-detail">
+                <div class="edit-profile-form" id="addressForm">
+                    <h2 class="mb-3 text-center" style="font-size: 24px; color: #363636;">Edit Address</h2><br>
+                    <form action="/addressUpdated/<%= adress.address._id %>" id="addressForm" method="POST">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="saveas">Save as</label>
+                                <input type="text" id="saveas" name="saveas" required
+                                    value="<%= adress.address.save_as %>" class="form-control" readonly>
+                                <span id="saveasError" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="fullname">Full Name</label>
+                                <input type="text" id="fullname" name="name" required value="<%= adress.address.name %>"
+                                    class="form-control">
+                                <span id="fullnameError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required value="<%= adress.address.email %>"
+                                    class="form-control" readonly>
+                                <span id="emailError" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="adname">House Name / Flat No</label>
+                                <input type="text" id="adname" name="housename" class="form-control" required
+                                    value="<%= adress.address.housename %>">
+                                <span id="adnameError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street" class="form-control" required
+                                    value="<%= adress.address.street %>">
+                                <span id="streetError" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="pincode">Pincode</label>
+                                <input type="number" id="pincode" name="pincode" class="form-control" required
+                                    value="<%= adress.address.pincode %>">
+                                <span id="pincodeError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" class="form-control" required
+                                    value="<%= adress.address.city %>">
+                                <span id="cityError" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" class="form-control" required
+                                    value="<%= adress.address.state %>">
+                                <span id="stateError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="country">Country</label>
+                                <input type="text" id="country" name="country" class="form-control" required
+                                    value="<%= adress.address.country %>" readonly>
+                                <span id="countryError" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" id="mobile" name="mobile" class="form-control" required
+                                    value="<%= adress.address.mobile %>">
+                                <span id="mobileError" class="text-danger"></span>
+                            </div>
+                        </div><br>
+                        <div class="form-group text-center">
+                            <button id="saveChangesButton" class="btn btn-primary">Save Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    <footer id="colorlib-footer" role="contentinfo">
+        <div class="container">
+            <div class="row row-pb-md">
+                <div class="col footer-col colorlib-widget">
+                    <h4>About Urban Kicks</h4>
+                    <p>Even the all-powerful Pointing has no control about the blind texts it is an almost
+                        unorthographic life</p>
+                    <p>
+                    <ul class="colorlib-social-icons">
+                        <li><a href="#"><i class="icon-twitter"></i></a></li>
+                        <li><a href="#"><i class="icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon-linkedin"></i></a></li>
+                        <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                    </ul>
+                    </p>
+                </div>
+                <div class="col footer-col colorlib-widget">
+                    <h4>Customer Care</h4>
+                    <p>
+                    <ul class="colorlib-footer-links">
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Returns/Exchange</a></li>
+                        <li><a href="#">Gift Voucher</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                        <li><a href="#">Special</a></li>
+                        <li><a href="#">Customer Services</a></li>
+                        <li><a href="#">Site maps</a></li>
+                    </ul>
+                    </p>
+                </div>
+                <div class="col footer-col colorlib-widget">
+                    <h4>Information</h4>
+                    <p>
+                    <ul class="colorlib-footer-links">
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Order Tracking</a></li>
+                    </ul>
+                    </p>
+                </div>
+
+                <div class="col footer-col">
+                    <h4>News</h4>
+                    <ul class="colorlib-footer-links">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Exhibitions</a></li>
+                    </ul>
+                </div>
+
+                <div class="col footer-col">
+                    <h4>Contact Information</h4>
+                    <ul class="colorlib-footer-links">
+                        <li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
+                        <li><a href="tel://1234567920">+ 1235 2355 98</a></li>
+                        <li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
+                        <li><a href="#">urbankicks.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copy">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p>
+                        <span>
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved.
+                        </span>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <div class="gototop js-top">
+        <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+    </div>
+
+
+    <script>
+        function validateAddress() {
+            var errors = '';
+            var saveas = document.getElementById('saveas').value.trim();
+            var fullname = document.getElementById('fullname').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var adname = document.getElementById('adname').value.trim();
+            var street = document.getElementById('street').value.trim();
+            var pincode = document.getElementById('pincode').value.trim();
+            var city = document.getElementById('city').value.trim();
+            var state = document.getElementById('state').value.trim();
+            var country = document.getElementById('country').value.trim();
+            var mobile = document.getElementById('mobile').value.trim();
+
+            var saveasError = document.getElementById('saveasError');
+            var fullnameError = document.getElementById('fullnameError');
+            var emailError = document.getElementById('emailError');
+            var adnameError = document.getElementById('adnameError');
+            var streetError = document.getElementById('streetError');
+            var pincodeError = document.getElementById('pincodeError');
+            var cityError = document.getElementById('cityError');
+            var stateError = document.getElementById('stateError');
+            var countryError = document.getElementById('countryError');
+            var mobileError = document.getElementById('mobileError');
+
+            saveasError.innerHTML = '';
+            fullnameError.innerHTML = '';
+            emailError.innerHTML = '';
+            adnameError.innerHTML = '';
+            streetError.innerHTML = '';
+            pincodeError.innerHTML = '';
+            cityError.innerHTML = '';
+            stateError.innerHTML = '';
+            countryError.innerHTML = '';
+            mobileError.innerHTML = '';
+
+            if (!saveas) {
+                saveasError.innerHTML = 'Save as is required.';
+                errors += 'Save as is required.\n';
+            }
+            if (!fullname) {
+                fullnameError.innerHTML = 'Full name is required.';
+                errors += 'Full name is required.\n';
+            }
+            if (!email) {
+                emailError.innerHTML = 'Email is required.';
+                errors += 'Email is required.\n';
+            } else if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                emailError.innerHTML = 'Invalid email address.';
+                errors += 'Invalid email address.\n';
+            }
+            if (!adname) {
+                adnameError.innerHTML = 'House name/Flat no is required.';
+                errors += 'House name/Flat no is required.\n';
+            }
+            if (!street) {
+                streetError.innerHTML = 'Street is required.';
+                errors += 'Street is required.\n';
+            }
+            if (!pincode) {
+                pincodeError.innerHTML = 'Pincode is required.';
+                errors += 'Pincode is required.\n';
+            } else if (!pincode.match(/^\d{6}$/)) {
+                pincodeError.innerHTML = 'Invalid pincode.';
+                errors += 'Invalid pincode.\n';
+            }
+            if (!city) {
+                cityError.innerHTML = 'City is required.';
+                errors += 'City is required.\n';
+            }
+            if (!state) {
+                stateError.innerHTML = 'State is required.';
+                errors += 'State is required.\n';
+            }
+            if (!country) {
+                countryError.innerHTML = 'Country is required.';
+                errors += 'Country is required.\n';
+            }
+            if (!mobile) {
+                mobileError.innerHTML = 'Mobile number is required.';
+                errors += 'Mobile number is required.\n';
+            } else if (!mobile.match(/^\d{10}$/)) {
+                mobileError.innerHTML = 'Invalid mobile number.';
+                errors += 'Invalid mobile number.\n';
+            }
+
+            if (errors) {
+
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        document.getElementById('saveChangesButton').addEventListener('click', function (event) {
+            if (!validateAddress()) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+<script>
+	document.getElementById('searchForm').addEventListener('submit', function(event) {
+			const searchInput = document.getElementById('searchInput').value.trim();
+			if (!searchInput) {
+					event.preventDefault(); 
+			}
+	});
+</script>
+
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- popper -->
+    <script src="/js/popper.min.js"></script>
+    <!-- bootstrap 4.1 -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- jQuery easing -->
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <!-- Waypoints -->
+    <script src="/js/jquery.waypoints.min.js"></script>
+    <!-- Flexslider -->
+    <script src="/js/jquery.flexslider-min.js"></script>
+    <!-- Owl carousel -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/magnific-popup-options.js"></script>
+    <!-- Date Picker -->
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <!-- Stellar Parallax -->
+    <script src="/js/jquery.stellar.min.js"></script>
+    <!-- Main -->
+    <script src="/js/main.js"></script>
+
+</body>
+
+</html>

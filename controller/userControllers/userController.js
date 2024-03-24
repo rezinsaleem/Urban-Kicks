@@ -2,7 +2,6 @@ const userCollection = require('../../model/userModel');
 const otpCollection = require('../../model/userOtpModel')
 const productCollection = require('../../model/productModel')
 const categoryCollection = require('../../model/categoryModel')
-const subcatCollection = require('../../model/subcatModel')
 const bcrypt = require('bcrypt')
 const otpgenerator = require('otp-generator')
 const nodemailer = require('nodemailer')
@@ -27,51 +26,24 @@ const LoadHome = async (req, res) => {
     try {
         const currentPage = 'home';
         const categories = await categoryCollection.find({status:true}).limit(3)
-        const products = await productCollection.find({ status: true }).limit(12)
+        const searchQuery = req.query.search;
+        if (searchQuery) { 
+            const searchRegex = new RegExp(searchQuery, 'i'); 
+            let searchCriteria = { description: searchRegex, status: true };
+            products = await productCollection.find(searchCriteria).exec();
+        } else {   
+            products = await productCollection.find({ status: true }).exec();
+         }
         if (req.user) {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
         }
-        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage})
+        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage,searchQuery})
     } catch (error) {
         console.log(error.message);
         res.render('user/servererror')
     }
 }
-
-const LoadShop = async (req, res) => {
-    try {
-        
-        const categories = await categoryCollection.find({status:true}).limit(3)
-        const categoryId = req.params.id;
-        const currentPage = categoryId;
-        const category = await categoryCollection.findById(categoryId)
-        const products = await productCollection.find({ status: true, category: categoryId })
-        const subcategories = await subcatCollection.find({ p_category: categoryId, status: true}).populate('p_category');
-
-         console.log(category.name)
-        res.render('user/shop', {  subcategories, products ,category ,categories,currentPage});
-    } catch (error) {
-        console.log(error.message);
-        res.render('user/servererror');
-    }
-};
-
-
-
-const shopSingle = async (req, res) => {
-    try {
-        const categories = await categoryCollection.find({status:true}).limit(3)
-        const productId = req.params.id;
-        const product = await productCollection.findById(productId); 
-        res.render('user/product-detail',{product,categories});
-    } catch (error) {
-        console.log(error);
-        res.render('user/servererror');
-    }
-}
-
-
 
 // otp generating function
 const generateotp = () => {
@@ -410,8 +382,6 @@ const facebookCallback = passport.authenticate('facebook', {
 module.exports = {
     LoadSignIn,
     LoadHome,
-    LoadShop,
-    shopSingle,
     signup,
     login,
     LoadOtp,

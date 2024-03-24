@@ -40,11 +40,13 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: "pending",
         required: true
-    }, address: {
+    }, 
+    address: {
         type: Array,
         required: true
-    },amount:{
-        type:String,
+    },
+    amount:{
+        type:Number,
         required:true
     },
     payment: {
@@ -58,7 +60,16 @@ const orderSchema = new mongoose.Schema({
     updated: {
         type: Date,
         required: true
-    }
+    },
+    return:[{
+        reason: {
+        type: String,
+        },
+        status: {
+        type: Boolean,
+        default:false
+        }
+    }]
 })
 
 

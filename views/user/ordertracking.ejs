@@ -51,12 +51,12 @@
 							<div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
+                            <form action="/" id="searchForm" class="search-wrap">
+								<div class="form-group">
+									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
+									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+								</div>
+						 </form>
 			         </div>
 		         </div>
              <div class="row">
@@ -355,6 +355,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <div class="gototop js-top">
 <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 </div>
+
+<script>
+	document.getElementById('searchForm').addEventListener('submit', function(event) {
+			const searchInput = document.getElementById('searchInput').value.trim();
+			if (!searchInput) {
+					event.preventDefault(); 
+			}
+	});
+</script>
 
 <!-- jQuery -->
 <script src="/js/jquery.min.js"></script>

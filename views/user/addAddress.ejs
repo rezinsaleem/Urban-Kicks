@@ -12,12 +12,12 @@
 							<div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
+                            <form action="/" id="searchForm" class="search-wrap">
+								<div class="form-group">
+									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
+									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+								</div>
+						 </form>
 			         </div>
 		         </div>
 						 <div class="row">
@@ -76,10 +76,9 @@
     <div class="container" style="max-width: 800px;">
       <div class="cart-detail" >
       <div class="edit-profile-form"  id="addressForm">
-          <!-- <p style="font-weight: 400; color: red; text-align: center;">!! The Address May not be saved if you enter invalid details </p> -->
           <h2 class="mb-3 text-center" style="font-size: 24px; color: #363636;">Add New Address</h2><br>
           <form action="/addressPost" id="addressForm" method="POST">
-              <!-- Personal details -->
+            
               <div class="form-row">
                   <div class="form-group col-md-6">
                       <label for="saveas">Save as</label>
@@ -249,18 +248,15 @@
         }
 
         if (errors) {
-            // Show errors
-            return false; // Return false if there are validation errors
+           
+            return false;
         } else {
-            // No errors, submit the form
-            return true; // Return true if validation passes
+            return true; 
         }
     }
 
     document.getElementById('saveChangesButton').addEventListener('click', function(event) {
-        // Validate form when the button is clicked
         if (!validateAddress()) {
-            // If validation fails, prevent form submission
             event.preventDefault();
         }
     });
