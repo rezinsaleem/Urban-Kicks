@@ -214,7 +214,7 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="paymentOption" value="upi"  onclick="handlePaymentMethodSelection()"> UPI payment </label>
+												<label><input type="radio" name="paymentOption" value="upi"  onclick="handlePaymentMethodSelection()"> Online payment </label>
 											</div>
 										</div>
 									</div>
@@ -292,7 +292,66 @@
         showCloseButton: true,
         showLoaderOnConfirm: false
       });
-		} else if (selectedPayment.value == "cashOnDelivery") {
+		  } else if (selectedPayment.value == 'upi') {
+        const amt = document.getElementById("total").textContent.trim();
+        const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
+        console.log(parseFloat(amount))
+        var options = {
+          key: 'rzp_test_3TxK9TdVgtd1BD',
+          amount: parseFloat(amount) * 100,
+          currency: "INR",
+          name: "UrbanKicks",
+          description: "Test Transaction",
+          image: "https://i.ibb.co/Jxd5tjS/uklogo.jpg",
+          order_id: orderId,
+          handler: function (response) {
+            // alert(response.razorpay_payment_id);
+
+            document.getElementById("amount").value = `${amount}`;
+            document.getElementById("orderform").method = "post";
+            document.getElementById("orderform").action = "/order";
+            document.getElementById("orderform").submit();
+          },
+
+          theme: {
+            color: "#afb5f9",
+          },
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on("payment.failed", function (response) {
+          alert(response.error.code);
+          alert(response.error.description);
+          alert(response.error.source);
+          alert(response.error.step);
+          alert(response.error.reason);
+          alert(response.error.metadata.payment_id);
+        });
+        rzp1.open();
+
+        event.preventDefault();
+
+        var orderId;
+        $(document).ready(function () {
+          var settings = {
+            url: "/create/orderId",
+            method: "POST",
+            timeout: 0,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+              amount: parseFloat(amount) * 100,
+            }),
+          };
+
+          $.ajax(settings).done(function (response) {
+            orderId = response.orderId;
+            console.log(orderId);
+            $("button").show();
+          });
+        });
+		
+		  } else if (selectedPayment.value == "cashOnDelivery") {
       console.log("Cash on Delivery selected");
       document.getElementById("orderform").action = "/order";
       document.getElementById("orderform").method = "post";
@@ -303,6 +362,7 @@
     }
 	}
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<!-- Bootstrap Bundle with Popper -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 	<%- include('../partials/userFooter') -%>

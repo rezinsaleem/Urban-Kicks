@@ -12,7 +12,7 @@
         <div class="col-lg-12 mt-4 mb-4">
           <h2 class="text-center mb-5" style="color: #3086d5;">Order Management</h2>
           <div class="table-responsive">
-            <table class="table table-bordered" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
+            <table class="table table-bordered my-3" style="box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);" id="myTable">
               <thead class="thead-dark text-center">
                 <tr>
                   <th>Order ID</th>
@@ -70,13 +70,12 @@
                                 <% const statuses=['pending', 'processing' , 'shipped' , 'delivered'
                                 ,'Cancelled','returned']; %>
                                 <% for (const status of statuses) { %>
-                                            <option value="<%= status %>"
-                                                <%=data.status===status ? 'selected' : '' %>><%=
-                                                    status.charAt(0).toUpperCase() +
-                                                    status.slice(1) %>
-                                            </option>
-                                            <% } %>
-                                        </select>
+                                  <option value="<%= status %>" <%=data.status === status ? 'selected' : '' %>>
+                                    <%= status.charAt(0).toUpperCase() + status.slice(1) %>
+                                </option>
+                                
+                                     <% } %>
+                                 </select>
                                 <% } %>
                     </form>
                       </td>
@@ -106,4 +105,16 @@
     }
   </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+  jQuery.noConflict();
+  (function($) {
+      // $ refers to jQuery within this function
+      $(document).ready(function() {
+          $('#myTable').DataTable();
+      });
+  })(jQuery);
+  </script>
   <%- include('../partials/adminFooter') -%>

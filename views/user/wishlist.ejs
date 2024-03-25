@@ -82,7 +82,7 @@
 				<% } else { %>
 					<% fav.item.forEach(product=> { %>
 					<div class="col-md-3 mb-4">
-						<div class="card border text-center">
+						<div class="card border text-center" style="height: 580px;">
 							<a href="/shopSingle/<%= product.productId._id %>"><img src="/<%= product.productId.image[0] %>" class="card-img-top" alt="<%= product.productId.name %>" style="width: 253.5px; height: auto; object-fit: cover" /></a>
 							<div class="card-body">
 								<h5 class="card-title"><a href="/shopSingle/<%= product.productId._id %>"><%= product.productId.name %></a></h5>
@@ -90,7 +90,7 @@
 									size : <%= product.size %></p>
 								<form action="/addtoCart/<%= product.productId._id %>?size=<%= product.size %>" method="post" class="text-center">
 									<button type="submit" class="btn btn-primary btn-sm btn-block mb-2"><i class="icon-shopping-cart mr-1"></i>Add to Cart</button>
-									<a onclick="confirm('/removefromwishlist/<%= product.productId._id %>')" class="btn btn-danger btn-sm btn-block" style="color: white;">Remove from Wishlist</a>
+									<a onclick="confirm('/removefromwishlist/<%= product.productId._id %>')" class="btn btn-outline-dark btn-sm btn-block" style="color: #f34646;">Remove from Wishlist</a>
 									<input type="hidden" name="size" value="<%= product.size %>" />
 									<input type="hidden" name="quantity" value= "1" />
 								</form>

@@ -5,6 +5,14 @@ const cartCollection = require('../../model/cartModel')
 const categoryCollection = require('../../model/categoryModel')
 const productCollection = require('../../model/productModel')
 
+const Razorpay = require('razorpay');
+
+var instance = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET,
+});
+
+
 
 const LoadCheckOut = async(req,res)=>{
   try {
@@ -45,7 +53,7 @@ const order = async(req,res)=>{
     const currentPage='cart';
       const categories = await categoryCollection.find({status:true}).limit(3)
       const {address,pay}=req.body
-      let amount=req.body.amount
+      let amount = parseFloat(req.body.amount.replace(/[^\d.-]/g, ''));
       const userId=req.session.userId;
       const cart=await cartCollection.findOne({userId:userId})
       const useraddress = await addressCollection.findOne({ userId: userId })
@@ -86,7 +94,19 @@ const order = async(req,res)=>{
   }
 }
 
+const upi = async (req, res) => {
+  var options = {
+    amount: req.body.amount,
+    currency: "INR",
+    receipt: "order_rcpt"
+  };
+  instance.orders.create(options, function (err, order) {
+    res.send({ orderId: order.id })
+  })
+}
+
 module.exports = {
   LoadCheckOut,
   order,
+  upi,
 }

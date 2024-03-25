@@ -62,6 +62,7 @@ userRouter.get('/deletcart/:id/:size', Auth.isLoggedUser, cartController.deleteC
 
 userRouter.get('/checkout',Auth.isLoggedUser,Auth.checkoutValid,checkoutController.LoadCheckOut)
 userRouter.post('/order',Auth.isLoggedUser,Auth.checkoutValid, checkoutController.order)
+userRouter.post('/create/orderId',Auth.isLoggedUser,Auth.checkoutValid, checkoutController.upi)
 
 
 //profile
