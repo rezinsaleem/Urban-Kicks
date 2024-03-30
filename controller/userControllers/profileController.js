@@ -5,6 +5,7 @@ const orderCollection = require('../../model/orderModel');
 const productCollection = require('../../model/productModel');
 const walletCollection = require('../../model/walletModel');
 const mongoose = require('mongoose');
+const Razorpay = require('razorpay');
 const bcrypt = require('bcrypt')
 
 
@@ -343,6 +344,7 @@ const updatePassword = async (req, res) => {
 
 const LoadWallet = async (req, res) => {
     try {
+        const currentPage = 'profile';
         const userId = req.session.userId;
         const categories = await categoryCollection.find()
         const user = await userCollection.findOne({ _id: userId })
@@ -351,12 +353,58 @@ const LoadWallet = async (req, res) => {
             { $unwind: "$history" },
             { $sort: { "history.date": -1 } }
         ]);
-        res.render('user/wallet', { wallet: wallet, user: user, categories,title:"Urbankicks - Wallet" })
+        res.render('user/wallet', { wallet: wallet, user: user, categories,title:"Urbankicks - Wallet",currentPage })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
     }
 }
+
+var instance = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET,
+  });
+  
+const walletupi = async (req, res) => {
+    console.log(req.body);
+    var options = {
+        amount: 500,
+        currency: "INR",
+        receipt: "order_rcpt"
+    };
+    instance.orders.create(options, function (err, order) {
+        res.send({ orderId: order.id })
+    })
+}
+
+const walletTopup = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const user = await userCollection.findOne({ _id: userId })
+        const Amount = parseFloat(req.body.Amount)
+        let wallet = await walletCollection.findOne({ userId: userId });
+       
+        if (!wallet) {
+            wallet = new walletCollection({ userId: userId, history: [] });
+        }
+
+        user.wallet += Amount;
+        wallet.history.push({
+            transaction: "Credited",
+            amount: Amount,
+            date: new Date(),
+            reason: "Wallet TopUp"
+        });
+
+        await wallet.save();
+        await user.save();
+        res.redirect("/wallet")
+    } catch (error) {
+        console.error('Error handling Razorpay callback:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 
 module.exports = {
     LoadProfile,
@@ -372,4 +420,6 @@ module.exports = {
    LoadResetPassword,
    updatePassword,
    LoadWallet,
+   walletTopup,
+   walletupi,
 }

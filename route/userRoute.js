@@ -65,6 +65,7 @@ userRouter.post('/order',Auth.isLoggedUser,Auth.checkoutValid, checkoutControlle
 userRouter.post('/create/orderId',Auth.isLoggedUser,Auth.checkoutValid, checkoutController.upi)
 userRouter.post("/applyCoupon",Auth.isLoggedUser,Auth.checkoutValid,checkoutController.applyCoupon)
 userRouter.post("/revokeCoupon",Auth.isLoggedUser,Auth.checkoutValid,checkoutController.revokeCoupon)
+userRouter.post('/wallettransaction',Auth.isLoggedUser, checkoutController.walletTransaction)
 userRouter.get('/ordercomplete',Auth.isLoggedUser,Auth.checkoutValid,checkoutController.LoadOrderComplete)
 
 
@@ -85,6 +86,10 @@ userRouter.get('/order-tracking/:id', Auth.isLoggedUser, profileController.order
 
 userRouter.get('/resetpassword',Auth.isLoggedUser,profileController.LoadResetPassword)
 userRouter.post('/passwordUpdate',Auth.isLoggedUser,profileController.updatePassword)
+
+userRouter.get('/wallet',Auth.isLoggedUser, profileController.LoadWallet)
+userRouter.post('/walletcreate/orderId', profileController.walletupi)
+userRouter.post('/walletTopup', profileController.walletTopup)
 
 
 module.exports = userRouter;

@@ -1,0 +1,214 @@
+<%- include('../partials/userHeader') -%>
+
+<style>
+  .border-success {
+  border-color: #049827 !important; /* Green border color */
+}
+
+.border-danger{
+  border-color: #db0116 !important; /* Red border color */
+}
+
+</style>
+
+	<div class="colorlib-loader"></div>
+
+	<div id="page">
+		<nav class="colorlib-nav" role="navigation">
+			<div class="top-menu">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-7 col-md-9">
+							<div id="colorlib-logo"><a href="/home">Urban Kicks</a></div>
+						</div>
+						<div class="col-sm-5 col-md-3">
+							<form action="/" id="searchForm" class="search-wrap">
+								<div class="form-group">
+									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
+									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+								</div>
+						 </form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 text-left menu-1">
+							<ul>
+								<li class="<%= currentPage === 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
+								<% categories.forEach(category => { %>
+									<li class="<%= currentPage === category.id ? 'active' : '' %>"><a href="/shop/<%= category.id %>"><%= category.name %></a></li>
+							<% }); %>
+								<li class="<%= currentPage === 'about' ? 'active' : '' %>"><a href="/about">About</a></li>
+								<li class="<%= currentPage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact</a></li>
+								<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+								<li class="wishlist <%= currentPage === 'wishlist' ? 'active' : '' %>"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
+								<li class="user-profile <%= currentPage === 'profile' ? 'active' : '' %>"><a href="/profile"><i class="icon-user2"></i></a></li>
+							 
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="sale">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8 offset-sm-2 text-center">
+							<div class="row">
+								<div class="owl-carousel2">
+									<div class="item">
+										<div class="col">
+											<h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+										</div>
+									</div>
+									<div class="item">
+										<div class="col">
+											<h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread"><span><a href="/">Home</a></span> / <span>wallet</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+ 
+  <div class="container mt-5">
+      <h1 class="mb-4 text-center">Wallet History</h1>
+      <h4 class="mb-4 text-center">Balance: ₹<%= user.wallet %></h4>
+      <form id="Form" class="mb-4 mx-auto">
+        <div class="d-flex justify-content-center mb-3">
+          <div class="input-group w-50">
+              <input type="number" id="Amount" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" name="Amount" class="form-control" placeholder="Enter Amount" min="0">
+              <div class="input-group-append">
+                  <button class="btn btn-primary my-auto" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" onclick="RazorpayWallet(event)">Add To Wallet</button>
+              </div>
+          </div>
+      </div>
+      </form>
+      <% if(wallet && wallet.length > 0) { %>
+      <div class="row">
+      <% wallet.forEach((entry, index) => { %>
+      <div class="col-md-6 mb-4">
+          <div class="card  <%= entry.history.transaction === 'Credited' ? 'border border-success' : 'border border-danger'; %>">
+          <div class="card-body">
+              <h5 class="card-title font-weight-bold  <%= entry.history.transaction === 'Credited' ? 'text-success' : 'text-danger'; %>">
+                  <%= entry.history.transaction    %>
+              </h5>
+              
+              
+              <p class="card-text text-black">Reason: <%= entry.history.reason %></p>
+              <p class="card-text text-black">Amount: ₹<%= entry.history.amount %></p>
+              <p class="card-text text-black">Date: <%= new Date(entry.history.date).toLocaleString() %></p>
+          </div>
+          </div>
+      </div>
+      <% if((index + 1) % 2 === 0 && (index + 1) !== wallet.length) { %>
+      </div>
+      <div class="row">
+      <% } %>
+      <% }); %>
+      </div>
+      <% } else { %>
+      <p class="text-center">No history available.</p>
+      <% } %>
+  </div>
+      <br><br>
+
+      <script>
+        async function RazorpayWallet() {
+            event.preventDefault()
+            console.log("ivide function");
+            let amountToPay = document.getElementById('Amount').value
+            console.log(amountToPay);
+            if (!amountToPay) {
+                Swal.fire({
+                    text: 'please enter an amount',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        title: 'text-danger',
+                        popup: 'swal2-popup-custom',
+                        confirmButton: 'btn btn-danger'
+                    },
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    showLoaderOnConfirm: false,
+                    timer: 3000
+                });
+
+            }
+
+
+
+            else {
+                console.log("adding rzp cash");
+                var options = {
+                    key: 'rzp_test_3TxK9TdVgtd1BD',
+                    amount: amountToPay * 100,
+                    currency: "INR",
+                    name: "UrbanKicks",
+                    description: "Test Transaction",
+                    image: "https://i.ibb.co/Jxd5tjS/uklogo.jpg",
+                    order_id: orderId,
+                    handler: function (response) {
+                        // alert(response.razorpay_payment_id);
+                        document.getElementById("Form").method = "post";
+                        document.getElementById("Form").action = "/walletTopup";
+                        document.getElementById("Form").submit();
+                    },
+
+                    theme: {
+                        color: "#afb5f9",
+                    },
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on("payment.failed", function (response) {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.payment_id);
+                });
+                rzp1.open();
+
+                event.preventDefault();
+
+                var orderId;
+                $(document).ready(function () {
+                    var settings = {
+                        url: "/walletcreate/orderId",
+                        method: "POST",
+                        timeout: 0,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: JSON.stringify({
+                            amount: amountToPay * 100,
+                        }),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        orderId = response.orderId;
+                        console.log(orderId);
+                        $("button").show();
+                    });
+                });
+            }
+        }
+
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <%- include('../partials/userFooter') -%>

@@ -8,6 +8,7 @@ const couponCollection = require('../../model/couponModel')
 const userCollection = require('../../model/userModel')
 
 const Razorpay = require('razorpay');
+const walletCollection = require('../../model/walletModel')
 
 var instance = new Razorpay({
   key_id: process.env.KEY_ID,
@@ -47,8 +48,8 @@ const LoadCheckOut = async (req, res) => {
       couponCode: { $nin: user.usedCoupons },
       status: true,
     });
-    console.log(req.session.cart)
-    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data, categories, currentPage, successMessages, errorMessages,session:req.session })
+
+    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data, categories, currentPage, successMessages, errorMessages, session: req.session })
   } catch (error) {
     console.log(error)
     res.render("user/servererror")
@@ -57,47 +58,99 @@ const LoadCheckOut = async (req, res) => {
 
 const order = async (req, res) => {
   try {
-    const { address, pay } = req.body
+    const { address, pay } = req.body;
     let amount = parseFloat(req.body.amount.replace(/[^\d.-]/g, ''));
+    let wallet = parseInt(req.body.wallet);
     const userId = req.session.userId;
-    const cart = await cartCollection.findOne({ userId: userId })
-    const useraddress = await addressCollection.findOne({ userId: userId })
-    const selectedaddress = useraddress.address[address]
+    const cart = await cartCollection.findOne({ userId: userId });
+    const useraddress = await addressCollection.findOne({ userId: userId });
+    const selectedaddress = useraddress.address[address];
     const items = cart.item.map(item => ({
       productId: item.productId,
       quantity: item.quantity,
       size: item.size,
       price: item.price,
-    }))
+    }));
+
     for (const item of items) {
-      const product = await productCollection.findOne({ _id: item.productId })
-      const size = product.stock.findIndex(size => size.size == item.size)
-      product.stock[size].quantity -= item.quantity
-      await product.save()
+      const product = await productCollection.findOne({ _id: item.productId });
+      const size = product.stock.findIndex(size => size.size == item.size);
+      product.stock[size].quantity -= item.quantity;
+      await product.save();
     }
-    const order = new orderCollection({
-      userId: userId,
-      items: items,
-      amount: amount,
-      payment: pay,
-      address: selectedaddress,
-      createdAt: new Date(),
-      updated: new Date()
-    })
-    cart.item = []
-    cart.total = 0
-    const savedOrder = await order.save()
-    await cart.save()
+
+    let order;
+    if (pay == "paymentPending") {
+      order = new orderCollection({
+        userId: userId,
+        items: items,
+        amount: amount,
+        wallet: wallet,
+        status: "paymentPending",
+        payment: pay,
+        address: selectedaddress,
+        createdAt: new Date(),
+        updated: new Date()
+      });
+    } else {
+      order = new orderCollection({
+        userId: userId,
+        items: items,
+        amount: amount,
+        wallet: wallet,
+        payment: pay,
+        address: selectedaddress,
+        createdAt: new Date(),
+        updated: new Date()
+      });
+    }
+
+    cart.item = [];
+    cart.total = 0;
+
+    if (wallet > 0) {
+      const userWallet = await walletCollection.findOne({ userId: userId });
+      const user = await userCollection.findOne({ _id: userId });
+      console.log(typeof user.wallet, user.wallet, typeof amount, amount)
+      if (user.wallet >= amount) {
+        user.wallet -= amount;
+        await user.save();
+        userWallet.history.push({
+          transaction: "Debited",
+          amount: amount,
+          date: new Date(),
+          reason: "Product Purchased"
+        });
+        await userWallet.save()
+
+      } else {
+        console.log("else", typeof amount, amount);
+        userWallet.history.push({
+          transaction: "Debited",
+          amount: user.wallet,
+          date: new Date(),
+          reason: "Product Purchased"
+        });
+        await userWallet.save();
+        const remainingAmount = amount - user.wallet; // Calculate remaining amount
+        user.wallet = 0;
+        await user.save();
+        amount = remainingAmount; // Update amount to the remaining amount
+      }
+    }
+    const savedOrder = await order.save();
+    await cart.save();
 
     delete req.session.cart;
-    
-    req.session.orderId=savedOrder.orderId;
-    res.redirect('/ordercomplete')
+
+    req.session.orderId = savedOrder.orderId;
+    res.redirect('/ordercomplete');
   } catch (error) {
     console.log(error);
     res.render("user/servererror");
   }
-}
+};
+
 
 const upi = async (req, res) => {
   var options = {
@@ -108,6 +161,22 @@ const upi = async (req, res) => {
   instance.orders.create(options, function (err, order) {
     res.send({ orderId: order.id })
   })
+}
+
+const walletTransaction = async (req, res) => {
+  try {
+    const amount = req.body.amount
+    const user = await userCollection.findOne({ _id: req.session.userId })
+    if (user.wallet >= amount) {
+      res.json({ success: true })
+    }
+    else {
+      res.json({ success: false, amount: user.wallet })
+    }
+  } catch (error) {
+    console.log(error);
+    res.render("user/servererror");
+  }
 }
 
 const applyCoupon = async (req, res) => {
@@ -145,7 +214,7 @@ const applyCoupon = async (req, res) => {
           { $addToSet: { usedCoupons: couponCode } },
           { new: true }
         );
-        req.session.cart = { total: price,dicprice:dicprice, couponApplied: true };
+        req.session.cart = { total: price, dicprice: dicprice, couponApplied: true };
         res.json({ success: true, dicprice, price });
       } else {
         res.json({ success: false, message: "Invalid Coupon" });
@@ -181,7 +250,7 @@ const revokeCoupon = async (req, res) => {
           { $pull: { usedCoupons: couponCode } },
           { new: true }
         );
-        req.session.cart = { total: price,dicprice:dicprice, couponApplied: false };
+        req.session.cart = { total: price, dicprice: dicprice, couponApplied: false };
         res.json({ success: true, dicprice, price });
       } else {
         res.json({ success: false, message: "Invalid Coupon" });
@@ -195,15 +264,15 @@ const revokeCoupon = async (req, res) => {
   }
 };
 
-const LoadOrderComplete = async(req,res)=>{
+const LoadOrderComplete = async (req, res) => {
   try {
     const currentPage = 'cart';
     const categories = await categoryCollection.find({ status: true }).limit(3)
-    const orderconfirmation = await orderCollection.findOne({ orderId: req.session.orderId}).populate({
+    const orderconfirmation = await orderCollection.findOne({ orderId: req.session.orderId }).populate({
       path: 'items.productId',
       select: 'name'
     })
-    res.render('user/order-complete',{order: orderconfirmation,categories,currentPage,title:"Urbankicks - thankyou"})
+    res.render('user/order-complete', { order: orderconfirmation, categories, currentPage, title: "Urbankicks - thankyou" })
   } catch (error) {
     console.log(error)
     res.render('user/servererror')
@@ -217,5 +286,6 @@ module.exports = {
   applyCoupon,
   revokeCoupon,
   LoadOrderComplete,
+  walletTransaction,
 
 }
