@@ -63,6 +63,9 @@ userRouter.get('/deletcart/:id/:size', Auth.isLoggedUser, cartController.deleteC
 userRouter.get('/checkout',Auth.isLoggedUser,Auth.checkoutValid,checkoutController.LoadCheckOut)
 userRouter.post('/order',Auth.isLoggedUser,Auth.checkoutValid, checkoutController.order)
 userRouter.post('/create/orderId',Auth.isLoggedUser,Auth.checkoutValid, checkoutController.upi)
+userRouter.post("/applyCoupon",Auth.isLoggedUser,Auth.checkoutValid,checkoutController.applyCoupon)
+userRouter.post("/revokeCoupon",Auth.isLoggedUser,Auth.checkoutValid,checkoutController.revokeCoupon)
+userRouter.get('/ordercomplete',Auth.isLoggedUser,Auth.checkoutValid,checkoutController.LoadOrderComplete)
 
 
 //profile

@@ -47,7 +47,8 @@ const LoadCheckOut = async (req, res) => {
       couponCode: { $nin: user.usedCoupons },
       status: true,
     });
-    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data, categories, currentPage, successMessages, errorMessages })
+    console.log(req.session.cart)
+    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data, categories, currentPage, successMessages, errorMessages,session:req.session })
   } catch (error) {
     console.log(error)
     res.render("user/servererror")
@@ -56,8 +57,6 @@ const LoadCheckOut = async (req, res) => {
 
 const order = async (req, res) => {
   try {
-    const currentPage = 'cart';
-    const categories = await categoryCollection.find({ status: true }).limit(3)
     const { address, pay } = req.body
     let amount = parseFloat(req.body.amount.replace(/[^\d.-]/g, ''));
     const userId = req.session.userId;
@@ -89,11 +88,11 @@ const order = async (req, res) => {
     cart.total = 0
     const savedOrder = await order.save()
     await cart.save()
-    const orderconfirmation = await orderCollection.findOne({ orderId: savedOrder.orderId }).populate({
-      path: 'items.productId',
-      select: 'name'
-    })
-    res.render('user/order-complete', { currentPage, title: "Urban Kicks - thankyou", order: orderconfirmation, categories })
+
+    delete req.session.cart;
+    
+    req.session.orderId=savedOrder.orderId;
+    res.redirect('/ordercomplete')
   } catch (error) {
     console.log(error);
     res.render("user/servererror");
@@ -111,8 +110,112 @@ const upi = async (req, res) => {
   })
 }
 
+const applyCoupon = async (req, res) => {
+  try {
+    const { couponCode, subtotal } = req.body;
+    console.log("total", subtotal);
+    const userId = req.session.userId;
+    const coupon = await couponCollection.findOne({ couponCode: couponCode });
+    console.log(coupon);
+
+    if (coupon && coupon.status === true) {
+      const user = await userCollection.findById(userId);
+
+      if (user && user.usedCoupons.includes(couponCode)) {
+        res.json({ success: false, message: "Already Redeemed" });
+      } else if (
+        coupon.expiry > new Date() &&
+        coupon.minimumPrice <= subtotal
+      ) {
+        console.log("Coupon is valid");
+        let dicprice;
+        let price;
+        if (coupon.type === "percentageDiscount") {
+          dicprice = (subtotal * coupon.discount) / 100;
+          if (dicprice >= coupon.maxRedeem) {
+            dicprice = coupon.maxRedeem;
+          }
+          price = subtotal - dicprice;
+        } else if (coupon.type === "flatDiscount") {
+          dicprice = coupon.discount;
+          price = subtotal - dicprice;
+        }
+        await userCollection.findByIdAndUpdate(
+          userId,
+          { $addToSet: { usedCoupons: couponCode } },
+          { new: true }
+        );
+        req.session.cart = { total: price,dicprice:dicprice, couponApplied: true };
+        res.json({ success: true, dicprice, price });
+      } else {
+        res.json({ success: false, message: "Invalid Coupon" });
+      }
+    } else {
+      res.json({ success: false, message: "Coupon not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.render("users/servererror")
+  }
+};
+const revokeCoupon = async (req, res) => {
+  try {
+    console.log("revoke called");
+    const { couponCode, subtotal } = req.body;
+    const userId = req.session.userId;
+    const coupon = await couponCollection.findOne({ couponCode: couponCode });
+    console.log(coupon);
+
+    if (coupon) {
+      const user = await userCollection.findOne({ userId: userId });
+      if (coupon.expiry > new Date() && coupon.minimumPrice <= subtotal) {
+        console.log("Coupon is valid");
+        const dprice = (subtotal * coupon.discount) / 100;
+        const dicprice = 0;
+
+        const price = subtotal;
+        console.log(price);
+
+        await userCollection.findByIdAndUpdate(
+          userId,
+          { $pull: { usedCoupons: couponCode } },
+          { new: true }
+        );
+        req.session.cart = { total: price,dicprice:dicprice, couponApplied: false };
+        res.json({ success: true, dicprice, price });
+      } else {
+        res.json({ success: false, message: "Invalid Coupon" });
+      }
+    } else {
+      res.json({ success: false, message: "coupon not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.render("user/servererror")
+  }
+};
+
+const LoadOrderComplete = async(req,res)=>{
+  try {
+    const currentPage = 'cart';
+    const categories = await categoryCollection.find({ status: true }).limit(3)
+    const orderconfirmation = await orderCollection.findOne({ orderId: req.session.orderId}).populate({
+      path: 'items.productId',
+      select: 'name'
+    })
+    res.render('user/order-complete',{order: orderconfirmation,categories,currentPage,title:"Urbankicks - thankyou"})
+  } catch (error) {
+    console.log(error)
+    res.render('user/servererror')
+  }
+}
+
 module.exports = {
   LoadCheckOut,
   order,
   upi,
+  applyCoupon,
+  revokeCoupon,
+  LoadOrderComplete,
+
 }

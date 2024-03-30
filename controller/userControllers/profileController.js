@@ -3,6 +3,7 @@ const categoryCollection = require('../../model/categoryModel')
 const userCollection = require('../../model/userModel')
 const orderCollection = require('../../model/orderModel');
 const productCollection = require('../../model/productModel');
+const walletCollection = require('../../model/walletModel');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 
@@ -340,6 +341,22 @@ const updatePassword = async (req, res) => {
     }
 }
 
+const LoadWallet = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const categories = await categoryCollection.find()
+        const user = await userCollection.findOne({ _id: userId })
+        const wallet = await walletCollection.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+            { $unwind: "$history" },
+            { $sort: { "history.date": -1 } }
+        ]);
+        res.render('user/wallet', { wallet: wallet, user: user, categories,title:"Urbankicks - Wallet" })
+    } catch (error) {
+        console.log(error)
+        res.render('user/servererror')
+    }
+}
 
 module.exports = {
     LoadProfile,
@@ -354,4 +371,5 @@ module.exports = {
    deleteAddress,
    LoadResetPassword,
    updatePassword,
+   LoadWallet,
 }

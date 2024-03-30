@@ -5,6 +5,7 @@ const adminController = require("../controller/adminControllers/adminController"
 const productController = require("../controller/adminControllers/productController")
 const categoryController = require('../controller/adminControllers/categoryController')
 const orderController = require('../controller/adminControllers/orderController')
+const couponController = require('../controller/adminControllers/couponController')
 
 const multer = require("multer")
 const upload=multer({dest:'uploads/'})
@@ -66,5 +67,13 @@ adminRouter.post('/updateSubCategory/:id',Auth.adAuth,categoryController.updateS
 
 adminRouter.get('/orders',Auth.adAuth,orderController.LoadOrder)
 adminRouter.post('/updateOrderStatus',Auth.adAuth, orderController.orderstatus)
+
+adminRouter.get('/coupons', Auth.adAuth, couponController.LoadCoupon)
+adminRouter.get('/addcoupon',Auth.adAuth,couponController.LoadAddCoupon)
+adminRouter.post('/newCoupon',Auth.adAuth,couponController.createCoupon)
+adminRouter.get('/unlistCoupon/:id',Auth.adAuth,couponController.unlistCoupon)
+adminRouter.get('/editCouponGet/:id',Auth.adAuth,couponController.LoadEditCoupon)
+adminRouter.post('/updateCoupon',Auth.adAuth,couponController.updateCoupon)
+
 
 module.exports = adminRouter;
