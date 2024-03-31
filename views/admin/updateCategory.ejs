@@ -13,10 +13,17 @@
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" class="form-control" id="name" name="name" value="<%= category.name %>" required>
+        <div id="nameError" class="text-danger"></div>
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
         <textarea class="form-control" id="description" name="description" required><%= category.description %></textarea>
+        <div id="descriptionError" class="text-danger"></div>
+      </div>
+      <div class="form-group ">
+        <label for="price">Discount:   (in Percentage)</label>
+        <input type="number" class="form-control" id="discount" name="discount" min="0" value="<%=category.discount%>" required>
+        <div id="discountError" class="text-danger"></div>
       </div>
       <button type="submit" class="btn btn-primary">Update Category</button>
     </form>
@@ -25,6 +32,35 @@
 </main>
 </div>
 
+<script>
+  function validateForm() {
+    var name = document.getElementById('name').value;
+    var description = document.getElementById('description').value;
+    var nameError = document.getElementById('nameError');
+    var descriptionError = document.getElementById('descriptionError');
+
+    // Reset error messages
+    nameError.innerHTML = '';
+    descriptionError.innerHTML = '';
+
+    // Validate name
+    if (name.trim() === '') {
+      nameError.innerHTML = 'Name is required.';
+      return false;
+    } else if (/\d/.test(name)) {
+      nameError.innerHTML = 'Name must not contain numbers.';
+      return false;
+    }
+
+    // Validate description
+    if (description.trim() === '') {
+      descriptionError.innerHTML = 'Description is required.';
+      return false;
+    }
+
+    return true;
+  }
+  </script>
 
 <script>
 
@@ -32,9 +68,8 @@
   
   form.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent the default form submission
-  
+    if (validateForm()) {
     try {
-  
       // Display success Swal
       await Swal.fire({
         icon: 'success',
@@ -49,6 +84,7 @@
       console.error('Error:', error);
       
     }
+  }
   });
   
     </script>

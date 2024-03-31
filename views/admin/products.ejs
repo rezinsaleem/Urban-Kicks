@@ -63,6 +63,8 @@
                     <th>Category</th>
                     <th>Sub-category</th>
                     <th>Price</th>
+                    <th>Discount(%)</th>
+                    <th>DiscountPrice</th>
                     <th>Stock</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -79,6 +81,12 @@
                       <td><%= row.category ? row.category.name : 'N/A' %></td>
                       <td><%= row.sub_category ? row.sub_category.name : 'N/A' %></td>
                       <td><%= row.price %></td>
+                      <td>
+                        <%= row.discount %>%
+                    </td>
+                    <td>
+                        <%= row.discountPrice %>
+                    </td>
                       <td>
                         <select style="float:left;" onchange="updateStock(this, '<%= JSON.stringify(row.stock) %>','<%= index %>')">
                             <option value="">Select Size</option>

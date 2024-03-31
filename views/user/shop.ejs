@@ -207,7 +207,13 @@
 											<p>
 												<%= product.description %>
 											</p>
-											<span class="price"> ₹ <%= product.price %></span>
+											<span class="price text-primary" style="line-height: 2; font-size: 18px;">
+												<span style="text-decoration: line-through;"><%= product.price %></span>&nbsp;
+												₹<%= product.discountPrice %>
+											</span>
+											<p class="text-primary my-0" style="line-height: 0.5;">
+												<%= product.discount %>% OFF
+											</p>
 										</div>
 									</div>
 								</div>

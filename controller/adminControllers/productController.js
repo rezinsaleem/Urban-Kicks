@@ -46,13 +46,25 @@ const fetchSubcat = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
+    const category= req.body.parentCategory;
+    const categories=await categoryCollection.findById(category)
+    const categoryDiscount=categories.discount;
+    console.log(req.body.category,categories,categoryDiscount);
+    const price = req.body.price;
+    let discount = req.body.discount;
+    if(categoryDiscount>discount){
+        discount=categoryDiscount;
+    }
+    const discountPrice = price - (price * (discount / 100));
   
     const product = new productCollection({
       name: req.body.name,
-      category: req.body.parentCategory,
+      category: category,
       sub_category:req.body.subCategory,
       description: req.body.description,
-      price: req.body.price,
+      price: price,
+      discount: discount,
+      discountPrice:discountPrice,
       stock: [{
         size: "6",
         quantity: req.body.size6,
@@ -110,9 +122,21 @@ const updateProduct = async (req, res) => {
     
     const id = req.params.id;
     const product = await productCollection.findById(id)
+    const category=product.category;
+    const categories=await categoryCollection.findById(category)
+    const categoryDiscount=categories.discount;
+    const price = req.body.price;
+    let discount=req.body.discount;
+    if(categoryDiscount>discount){
+        discount=categoryDiscount;
+    }
+    const discountPrice = price - (price * (discount / 100));
+
     product.name = req.body.name
     product.description = req.body.description
-    product.price = req.body.price
+    product.price = price
+    product.discount=discount
+    product.discountPrice=discountPrice
     product.stock = [
       { size: '6', quantity: req.body.size6 },
       { size: '7', quantity: req.body.size7 },

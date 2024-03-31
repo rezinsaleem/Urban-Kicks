@@ -49,6 +49,7 @@
                       <th>SR.NO.</th>
                       <th>Name</th>
                       <th>Description</th>
+                      <th>Discount</th>
                       <th>Status</th>
                       <th>Action</th>
                       <th>Update</th>
@@ -66,6 +67,9 @@
                           <td>
                               <%= row.description %>
                           </td>
+                          <td>
+                            <%= row.discount %>%
+                        </td>
                           <td>
                               <%= row.status?'Listed':'Unlisted' %>
                           </td>

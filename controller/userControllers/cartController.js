@@ -16,7 +16,7 @@ const addtocart = async (req, res) => {
     }
 
     const userId = req.session.userId;
-    const price = product.price;
+    const price = product.discountPrice;
 
     const stock = await productCollection.findOne({
       _id: productId,

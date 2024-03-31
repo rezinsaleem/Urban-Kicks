@@ -153,8 +153,9 @@
 					<div class="col-sm-4" id="product-detail">
 						<div class="product-desc">
 							<h3><%= product.name%></h3>
-							<p class="price">
-								<span> ₹ <%= product.price%></span> 
+							<p>
+								<span class="price" style="font-weight: 500;"> ₹ <%= product.discountPrice %></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="rate" style="text-decoration: line-through;color: #857b79;">₹<%= product.price%>
+                </span>&nbsp;&nbsp;&nbsp;<span class="rateOff">(<%= product.discount%>% OFF)</span><br><span style="font-weight: 300;color: rgb(11, 215, 157);">inclusive of all taxes</span><br>
 								<span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>

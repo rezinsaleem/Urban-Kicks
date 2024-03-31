@@ -24,6 +24,7 @@ const addCategory = async(req,res)=>{
   try{
     const categoryName = req.body.name;
     const categoryDescription = req.body.description;
+    const discount=req.body.discount;
     const categoryExist = await categoryCollection.findOne({ name: { $regex: new RegExp("^" + categoryName + "$", "i") } });
     console.log(categoryName)
 
@@ -32,7 +33,7 @@ const addCategory = async(req,res)=>{
       req.flash('error', 'Category Already Exists');
       return res.redirect('/admin/addcategory');
   } else {
-      await categoryCollection.create({ name: categoryName, description: categoryDescription });
+      await categoryCollection.create({ name: categoryName, description: categoryDescription ,discount:discount});
       req.flash('success', 'Category Added Successfully!');
       res.redirect('/admin/categories');
   }
@@ -72,6 +73,7 @@ const updateCategory = async(req,res)=>{
     const category = await categoryCollection.findById(id);
     category.name = req.body.name;
     category.description = req.body.description;
+    category.discount=req.body.discount;
     await category.save()
     res.redirect('/admin/categories')
   }catch(err){
