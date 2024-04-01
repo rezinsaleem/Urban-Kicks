@@ -236,18 +236,18 @@
 										<h2>Cart Total</h2>
 										<ul>
 											<li >
-												<span>Subtotal</span>  <span id="subt">₹ <%= data.total %>.00</span>
+												<span>Subtotal</span>  <span id="subt">₹ <%= data.total %></span>
 												<ul>
 													<% data.item.forEach((item)=> { %>
 														<li><span>
 																<%= item.quantity %> x <%= item.productId.description %>
-															</span> <span>₹ <%= item.total %>.00</span></li>
+															</span> <span>₹ <%= item.total %></span></li>
 														<% }); %>
 												</ul>
 											</li>
 											<li><span>Coupon-Discount</span> <span id="dicprice">
 												<% if (session.cart && session.cart.dicprice) { %>
-														₹ <%= session.cart.dicprice %>.00
+														₹ <%= session.cart.dicprice %>
 												<% } else { %>
 														₹ 0.00
 												<% } %>
@@ -257,9 +257,9 @@
 										</li>
 											<li style="font-weight: bold;"><span>Order Total</span><span id="total">
 												<% if (session.cart && session.cart.total) { %>
-														₹ <%= session.cart.total %>.00
+														₹ <%= session.cart.total %>
 												<% } else { %>
-														₹ <%= data.total %>.00
+														₹ <%= data.total %>
 												<% } %>
 										</span></li>
 										</ul>

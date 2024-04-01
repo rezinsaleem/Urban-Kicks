@@ -1,5 +1,6 @@
 const subcatCollection = require('../../model/subcatModel');
 const categoryCollection = require('../../model/categoryModel')
+const productCollection = require('../../model/productModel')
 
 const LoadCategory = async(req,res)=>{
 try{
@@ -47,7 +48,8 @@ const LoadUpdateCategory = async(req,res)=>{
   try{
     const id = req.params.id;
     const category = await categoryCollection.findById(id);
-    res.render('admin/updateCategory',{category})
+    const catError=req.flash('catError');
+    res.render('admin/updateCategory',{category,catError})
   }catch(err){
     console.log(err)
     res.render('user/servererror');
@@ -70,12 +72,31 @@ const unlistCategory = async (req, res) => {
 const updateCategory = async(req,res)=>{
   try{
     const id = req.params.id;
+    const product=await productCollection.find({category:id})
     const category = await categoryCollection.findById(id);
-    category.name = req.body.name;
+    const catName = req.body.name;
+    const isNameModified = catName !== category.name; 
+    if (isNameModified) {
+      const catExist = await categoryCollection.findOne({ name: { $regex: new RegExp("^" + catName + "$", "i") } });
+      if (catExist) {
+          console.log("Already Exist");
+          req.flash('catError', 'Category Already Exists');
+          return res.redirect('/admin/updateCategory/' + id);
+      }
+  }
     category.description = req.body.description;
     category.discount=req.body.discount;
     await category.save()
-    res.redirect('/admin/categories')
+    const categoryDiscount=category.discount;
+    product.forEach(async (element) => {
+        if (categoryDiscount > element.discount) {
+            element.discount = categoryDiscount;
+        }
+        element.discountPrice = element.price - (element.price * (element.discount / 100));
+        await element.save();
+    });
+    console.log(categoryDiscount);
+    res.redirect('/admin/categories');
   }catch(err){
     console.log(err)
     res.render('user/servererror')

@@ -239,6 +239,7 @@
               <th class="text-dark">Quantity</th>
               <th class="text-dark">Price</th>
               <th class="text-dark">Total</th>
+              <th class="text-dark">Payment</th>
           </tr>
       </thead>
       <tbody>
@@ -254,11 +255,14 @@
                       <%= item.quantity %>
                   </td>
                   <td class="text-center  align-middle">
-                      <%= item.price %>.00
+                      <%= item.price %>
                   </td>
                   <td class="text-center align-middle">
-                      <%= item.quantity * item.price %>.00
+                      <%= item.quantity * item.price %>
                   </td>
+                    <td class="text-center  align-middle">
+                        <%= order[0].payment %>
+                    </td>
               </tr>
           <% }); %>
           <tr>

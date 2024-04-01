@@ -25,6 +25,11 @@
         <input type="number" class="form-control" id="discount" name="discount" min="0" value="<%=category.discount%>" required>
         <div id="discountError" class="text-danger"></div>
       </div>
+      <% if(catError){%>
+        <div style="color: red; font-size: 16px; font-weight: bold;">
+            <%= catError%>
+        </div>
+            <%}%>
       <button type="submit" class="btn btn-primary">Update Category</button>
     </form>
 </div>

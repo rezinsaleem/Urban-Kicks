@@ -68,14 +68,10 @@ const addaddress = async (req, res) => {
             const existingAddress = existingUser.address.find(addr => addr.save_as === saveas);
 
             if (existingAddress) {
-                if (req.session.checkoutSave) {
-                    req.flash('error',`${existingAddress.save_as} address already exists!`)
-                    console.log("already existing address")
-                    return res.redirect(`/checkout`)
-                }
-                req.flash('error',`${existingAddress.save_as} address already exists! use edit address..`)
-                console.log("already existing address")
-                return res.redirect(`/address`)
+                const errorMessage = req.session.checkoutSave ? `${existingAddress.save_as} address already exists!` : `${existingAddress.save_as} address already exists! Use edit address..`;
+                req.flash('error', errorMessage);
+                console.log("already existing address");
+                return res.redirect(req.session.checkoutSave ? `/checkout` : `/address`);
             }
 
             existingUser.address.push({
@@ -92,12 +88,8 @@ const addaddress = async (req, res) => {
             });
 
             await existingUser.save();
-            if (req.session.checkoutSave) {
-                req.flash('success',"Address added successfully!!!")
-                return res.redirect(`/checkout`)
-            }
-            req.flash('success',"Address added successfully!!!")
-            return res.redirect('/address');
+            req.flash('success', "Address added successfully!!!");
+            return res.redirect(req.session.checkoutSave ? `/checkout` : `/address`);
         }
 
         const newAddress = await addressCollection.create({
@@ -115,13 +107,12 @@ const addaddress = async (req, res) => {
                 save_as: saveas,
             },
         });
-        if (req.session.checkoutSave) {
-            res.redirect(`/checkout`)
-        }
-        res.redirect('/address');
+
+        req.flash('success', "Address added successfully!!!");
+        return res.redirect(req.session.checkoutSave ? `/checkout` : `/address`);
     } catch (error) {
-        console.log(error)
-        res.render('user/servererror')
+        console.log(error);
+        res.render('user/servererror');
     }
 }
 
@@ -229,6 +220,38 @@ const ordercancelling = async (req, res) => {
         const update = await orderCollection.updateOne({ _id: id }, { status: "Cancelled", updated: new Date() })
         const result = await orderCollection.findOne({ _id: id })
 
+        if (result.payment == 'upi' || result.payment == 'wallet') {
+            const userId = req.session.userId
+            const user = await userCollection.findOne({ _id: userId })
+            console.log(result.amount)
+            user.wallet += parseInt(result.amount)
+            await user.save()
+
+            const wallet = await walletCollection.findOne({ userId: userId })
+            if (!wallet) {
+                const newWallet = new walletCollection({
+                    userId: userId,
+                    history: [
+                        {
+                            transaction: "Credited",
+                            amount: result.amount,
+                            date: new Date(),
+                            reason: "Order Cancelled"
+                        }
+                    ]
+                })
+                await newWallet.save();
+            } else {
+                wallet.history.push({
+                    transaction: "Credited",
+                    amount: result.amount,
+                    date: new Date(),
+                    reason: "Order Cancelled"
+                })
+                await wallet.save();
+            }
+        }
+
         const items = result.items.map(item => ({
             productId: item.productId,
             quantity: item.quantity,
@@ -238,7 +261,6 @@ const ordercancelling = async (req, res) => {
 
         for (const item of items) {
             const product = await productCollection.findOne({ _id: item.productId })
-
             const size = product.stock.findIndex(size => size.size == item.size)
             product.stock[size].quantity += item.quantity
             await product.save()
@@ -249,6 +271,7 @@ const ordercancelling = async (req, res) => {
         res.render('user/servererror')
     }
 }
+
 
 const ordertracking = async (req, res) => {
     try {
@@ -266,34 +289,31 @@ const ordertracking = async (req, res) => {
     }
 }
 
-const orderreturning = async (req, res) => {
+
+const returnReason = async (req, res) => {
     try {
-        const id = req.params.id
-        const update = await orderCollection.updateOne({ _id: id }, { status: "returned", updated: new Date() })
-        const result = await orderCollection.findOne({ _id: id })
-
-
-        const items = result.items.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            size: item.size,
-
-        }))
-
-        for (const item of items) {
-            const product = await productCollection.findOne({ _id: item.productId })
-
-            const size = product.stock.findIndex(size => size.size == item.size)
-            product.stock[size].quantity += item.quantity
-            await product.save()
-        }
-        res.redirect("/profile")
+        const itemId = req.body.itemId;
+        const reason = req.body.reason;
+        const update = await orderCollection.updateOne(
+            { _id: itemId },
+            { 
+                $push: { 
+                    return: { 
+                        reason: reason, 
+                        status: "Pending" 
+                    } 
+                }, 
+                $set: { 
+                    updated: new Date() 
+                } 
+            }
+        );
+        res.status(200).json({ message: 'Order return request processed successfully' });
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
     }
 }
-
 
 const LoadResetPassword = async (req, res) => {
     try {
@@ -412,7 +432,7 @@ module.exports = {
     addaddress,
     ordercancelling,
     ordertracking,
-    orderreturning,
+    returnReason,
     showaddress,
     LoadEditAddress,
    editaddress,

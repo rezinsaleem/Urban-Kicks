@@ -67,6 +67,10 @@ adminRouter.post('/updateSubCategory/:id',Auth.adAuth,categoryController.updateS
 
 adminRouter.get('/orders',Auth.adAuth,orderController.LoadOrder)
 adminRouter.post('/updateOrderStatus',Auth.adAuth, orderController.orderstatus)
+adminRouter.get('/orderReturn',Auth.adAuth,orderController.LoadOrderReturn)
+adminRouter.get('/returnApprove/:id',Auth.adAuth,orderController.returnApprove)
+adminRouter.get('/returnReject/:id',Auth.adAuth,orderController.returnReject)
+
 
 adminRouter.get('/coupons', Auth.adAuth, couponController.LoadCoupon)
 adminRouter.get('/addcoupon',Auth.adAuth,couponController.LoadAddCoupon)
