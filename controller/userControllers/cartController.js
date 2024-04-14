@@ -1,6 +1,7 @@
 const productCollection = require("../../model/productModel");
 const categoryCollection = require("../../model/categoryModel");
 const cartCollection = require("../../model/cartModel")
+const mongoose = require('mongoose')
 
 const addtocart = async (req, res) => {
   try {
@@ -103,9 +104,24 @@ const LoadCart = async (req, res) => {
         }
       }
     }
+
+    const result = await cartCollection.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $unwind: '$item' },
+      { $group: { _id: null, itemCount: { $sum: 1 } } },
+  ])
+  if (result.length > 0) {
+      const itemCount = result[0].itemCount;
+      req.session.cartCount = itemCount;
+  } 
+  if(result.length===0){
+      req.session.cartCount=0;
+  }
+
     req.session.checkout = true;
     const errorMessages = req.flash('error')
-    res.render('user/cart', { title: "UrbanKicks - Cart", cart, insufficientStock, categories, products, errorMessages,currentPage});
+    const itemCount = req.session.cartCount;
+    res.render('user/cart', { title: "UrbanKicks - Cart", cart, insufficientStock, categories, products, errorMessages,currentPage,itemCount});
   } catch (err) {
     res.render('user/servererror');
     console.error(err);

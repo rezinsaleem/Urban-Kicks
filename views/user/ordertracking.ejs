@@ -104,12 +104,12 @@
 <div class="container mt-5 text-center"> <!-- Added 'text-center' class to center content -->
   <div class="row">
       <div class="col-12 col-md-10 hh-grayBox mx-auto text-center pt-4 pb-4">
-          <% if (order[0].status==='pending' ) { %>
+          <% if (order.status==='pending' ) { %>
               <div class="row justify-content-between">
                   <div class="order-tracking completed">
                       <span class="is-complete"></span>
                       <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order[0].updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
+                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
                               day: 'numeric' }) %><br>Ordered
                       </p>
                   </div>
@@ -126,7 +126,7 @@
                       <p class="text-dark">Delivered</p>
                   </div>
               </div>
-          <% } else if (order[0].status==='processing' ) { %>
+          <% } else if (order.status==='processing' ) { %>
               <!-- Adjusted alignment -->
               <div class="row justify-content-between">
                   <div class="order-tracking completed">
@@ -136,7 +136,7 @@
                   <div class="order-tracking completed">
                       <span class="is-complete"></span>
                       <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order[0].updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
+                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
                               day: 'numeric' }) %><br>Processing
                       </p>
                   </div>
@@ -149,7 +149,7 @@
                       <p class="text-dark">Delivered</p>
                   </div>
               </div>
-          <% } else if (order[0].status==='shipped' ) { %>
+          <% } else if (order.status==='shipped' ) { %>
               <!-- Adjusted alignment -->
               <div class="row justify-content-between">
                   <div class="order-tracking completed">
@@ -163,7 +163,7 @@
                   <div class="order-tracking completed">
                       <span class="is-complete "></span>
                       <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order[0].updated.toLocaleString('en-US', { year: 'numeric' , month: 'short'
+                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short'
                               , day: 'numeric' }) %><br>Shipped
                       </p>
                   </div>
@@ -172,7 +172,7 @@
                       <p class="text-dark">Delivered</p>
                   </div>
               </div>
-          <% } else if (order[0].status==='delivered' ) { %>
+          <% } else if (order.status==='delivered' ) { %>
               <!-- Adjusted alignment -->
               <div class="row justify-content-between">
                   <div class="order-tracking completed">
@@ -190,12 +190,12 @@
                   <div class="order-tracking completed">
                       <span class="is-complete btn-block"></span>
                       <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order[0].updated.toLocaleString('en-US', { year: 'numeric' ,
+                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
                               month: 'short' , day: 'numeric' }) %><br>Delivered
                       </p>
                   </div>
               </div>
-          <% } else if (order[0].status==='Cancelled' ) { %>
+          <% } else if (order.status==='Cancelled' ) { %>
               <!-- Adjusted alignment -->
               <div class="row justify-content-between">
                   <div class="order-tracking completed cancelled">
@@ -213,7 +213,7 @@
                   <div class="order-tracking completed cancelled">
                       <span class="is-complete btn-block"></span>
                       <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order[0].updated.toLocaleString('en-US', { year: 'numeric' ,
+                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
                               month: 'short' , day: 'numeric' }) %><br>Cancelled
                       </p>
                   </div>
@@ -224,12 +224,12 @@
       </div>
   </div>
 
-  <h5 class="text-dark">Order ID: <%= order[0].orderId %>
+  <h5 class="text-dark">Order ID: <%= order.orderId %>
   </h5>
-  <p class="text-dark">Delivery Address: <%= order[0].address[0].save_as %>,
-      <%= order[0].address[0].housename %>,
-      <%= order[0].address[0].city %>,
-      <%= order[0].address[0].pincode %>
+  <p class="text-dark">Delivery Address: <%= order.address[0].save_as %>,
+      <%= order.address[0].housename %>,
+      <%= order.address[0].city %>,
+      <%= order.address[0].pincode %>
   </p>
   <table class="table">
       <thead>
@@ -243,7 +243,7 @@
           </tr>
       </thead>
       <tbody>
-          <% order[0].items.forEach(item=> { %>
+          <% order.items.forEach(item=> { %>
               <tr>
                 <td>
                     <img src="/<%= item.productId.image[0] %>" width="75" class="img-thumbnail" alt="image">
@@ -261,7 +261,7 @@
                       <%= item.quantity * item.price %>
                   </td>
                     <td class="text-center  align-middle">
-                        <%= order[0].payment %>
+                        <%= order.payment %>
                     </td>
               </tr>
           <% }); %>
@@ -272,11 +272,17 @@
               <td class="text-center">
                 <b>Total Bill Amount </b>
               </td>
-              <td class="text-center"><b><%= order[0].amount %></b> </td>
+              <td class="text-center"><b><%= order.amount %></b> </td>
           </tr>
       </tbody>
   </table>
-</div> <!-- Closed the container -->
+</div><br> <!-- Closed the container -->
+<% if(order.status=="delivered"){ %>
+    <div class="text-center mt-4">
+        <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-success btn-md" download>Download Invoice</a>
+      </div>
+      
+    <% } %>
 
 
 <footer id="colorlib-footer" role="contentinfo">

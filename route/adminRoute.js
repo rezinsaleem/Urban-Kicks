@@ -11,10 +11,15 @@ const multer = require("multer")
 const upload=multer({dest:'uploads/'})
 
 adminRouter.get("/",Auth.adLogout,adminController.LoadAdmin)
-
 adminRouter.post("/adminlogin",adminController.adminlogin);
 
 adminRouter.get("/dashboard",Auth.adAuth , adminController.LoadDashboard)
+adminRouter.post('/chartData',adminController.chartData)
+adminRouter.post('/downloadsales',Auth.adAuth,adminController.downloadsales)
+
+adminRouter.get('/bestSellingProduct',Auth.adAuth,adminController.bestSellingProduct)
+adminRouter.get('/bestSellingBrand',Auth.adAuth,adminController.bestSellingBrands)
+adminRouter.get('/bestSellingCategory',Auth.adAuth,adminController.bestSellingCategories)
 
 adminRouter.get("/customers",Auth.adAuth , adminController.LoadCustomers)
 

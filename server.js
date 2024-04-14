@@ -7,7 +7,9 @@ const userRouter = require("./route/userRoute")
 const adminRouter = require("./route/adminRoute")
 const session = require("express-session");
 const passport = require("passport");
-const multer = require('multer')
+const multer = require('multer');
+const path = require('path');
+const os = require('os');
 
 const PORT = process.env.PORT
 
@@ -38,6 +40,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/public/userAssets'))
 app.use(express.static(__dirname + '/public/adminAssets'))
+app.use(express.static(path.join(os.homedir(), 'Downloads')));
 
 app.set('view engine', 'ejs')
 

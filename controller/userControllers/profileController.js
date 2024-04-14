@@ -7,6 +7,12 @@ const walletCollection = require('../../model/walletModel');
 const mongoose = require('mongoose');
 const Razorpay = require('razorpay');
 const bcrypt = require('bcrypt')
+const fs = require('fs');
+const path = require('path');
+const easyinvoice=require('easyinvoice')
+
+
+
 
 
 
@@ -278,7 +284,7 @@ const ordertracking = async (req, res) => {
         currentPage = 'profile';
         const id = req.params.id
         const categories = await categoryCollection.find({ status: true }).limit(3)
-        const order = await orderCollection.find({ _id: id }).populate({
+        const order = await orderCollection.findOne({ _id: id }).populate({
             path: 'items.productId',
             select: 'name image description'
         })
@@ -288,6 +294,72 @@ const ordertracking = async (req, res) => {
         res.render('user/servererror')
     }
 }
+
+const downloadInvoice=async(req,res)=>{
+    try{
+        const orderId = req.params.id;
+        const order = await orderCollection.findOne({ orderId: orderId }).populate({
+            path: 'items.productId',
+            select: 'name, description',
+        });
+
+
+        const pdfBuffer = await generateInvoice(order);
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=invoice-${order.orderId}.pdf`);
+        res.send(pdfBuffer);
+    }catch(error){
+        console.log(error)
+        res.render('user/servererror')
+    }
+}
+
+const generateInvoice = async (order) => {
+    try {
+        let totalAmount = order.amount;        
+        const data = {  
+            documentTitle: 'Invoice',
+            currency: 'INR',
+            marginTop: 25,
+            marginRight: 25,
+            marginLeft: 25,
+            marginBottom: 25,
+            images:{
+                logo:"https://i.ibb.co/Jxd5tjS/uklogo.jpg",
+            },
+            sender: {
+                company: 'UrbanKicks',
+                address: 'HSR layout, Bengaluru, India',
+                zip: '130007',
+                city: 'Bengaluru',
+                country: 'INDIA',
+                phone: '9526559184',
+                email: 'urbankickscompany@gmail.com',
+                website: 'www.urbankicks.com',
+            },
+            invoiceNumber: `INV-${order.orderId}`,
+            invoiceDate: new Date().toJSON(),
+            products: order.items.map(item => ({
+                quantity: item.quantity,
+                description: item.productId.description,
+                price: item.price,
+            })),
+            total: `₹${totalAmount.toFixed(2)}`,
+            tax: 0,
+            bottomNotice: 'Thank you for shopping at UrbanKicks!',
+        };
+
+        const result = await easyinvoice.createInvoice(data);
+        const pdfBuffer = Buffer.from(result.pdf, 'base64');
+        return pdfBuffer;
+    } catch (error) {
+        console.log(error);
+        res.render('user/servererror');
+    }
+};
+
+
 
 
 const returnReason = async (req, res) => {
@@ -442,4 +514,5 @@ module.exports = {
    LoadWallet,
    walletTopup,
    walletupi,
+   downloadInvoice,
 }

@@ -83,6 +83,7 @@ userRouter.get('/deleteAddress/:id',Auth.isLoggedUser,profileController.deleteAd
 userRouter.get('/cancelorder/:id', Auth.isLoggedUser, profileController.ordercancelling)
 userRouter.post('/returnReason',profileController.returnReason)
 userRouter.get('/order-tracking/:id', Auth.isLoggedUser, profileController.ordertracking)
+userRouter.get('/downloadInvoice/:id',Auth.isLoggedUser,profileController.downloadInvoice)
 
 userRouter.get('/resetpassword',Auth.isLoggedUser,profileController.LoadResetPassword)
 userRouter.post('/passwordUpdate',Auth.isLoggedUser,profileController.updatePassword)

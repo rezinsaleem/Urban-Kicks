@@ -94,14 +94,95 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-10 offset-sm-1 text-center">
-						<p class="icon-addcart"><span><i class="icon-check"></i></span></p>
-						<h2 class="mb-4">Thank you for purchasing, Your order is complete</h2>
-						<p>
-							<a href="/profile"class="btn btn-primary btn-outline-primary">orders</a>
-							<a href="/"class="btn btn-primary btn-outline-primary"><i class="icon-shopping-cart"></i> Continue Shopping</a>
-						</p>
+							<% if(order.payment === "paymentPending") { %>
+									<p class="icon-addcart"><span><i class="icon-warning"></i></span></p>
+									<h2 class="mb-4 title_confirmation text-danger">Your Order is Pending due to Unfinished Payment.</h2>
+							<% } else { %>
+									<p class="icon-addcart"><span><i class="icon-check"></i></span></p>
+									<h2 class="mb-4 title_confirmation text-success">Thank you for purchasing, Your order is complete !</h2>
+							<% } %>
+							<p>
+									<a href="/profile" class="btn btn-primary btn-outline-primary">Orders</a>
+									<a href="/" class="btn btn-primary btn-outline-primary"><i class="icon-shopping-cart"></i> Continue Shopping</a>
+							</p>
 					</div>
+			</div><br><br>
+			<div class="row order_d_inner text-black">
+				<div class="col-lg-6">
+						<div class="details_item text-center">
+								<h4>Order Info</h4>
+								<ul class="list-unstyled">
+										<li>
+												<span>Order Id</span>: <%= order.orderId %>
+										</li>
+										<li>
+												<span>Date</span>:
+												<%= order.createdAt.toLocaleString('en-US', { year: 'numeric' , month: 'short' , day: 'numeric' , hour: '2-digit' , minute: '2-digit' }) %>
+										</li>
+										<li>
+												<span>Total</span>: <%= order.amount %>
+										</li>
+										<li>
+												<span>Payment Method</span>: <%= order.payment %>
+										</li>
+								</ul>
+						</div>
 				</div>
+				<div class="col-lg-6">
+						<div class="details_item text-center">
+								<h4>Shipping Address</h4>
+								<ul class="list-unstyled">
+										<li>
+												<span>House Name</span>: <%= order.address[0].housename %>
+										</li>
+										<li>
+												<span>Street</span>: <%= order.address[0].street %>
+										</li>
+										<li>
+												<span>City</span>: <%= order.address[0].city %>
+										</li>
+										<li>
+												<span>Country</span>: <%= order.address[0].country %>
+										</li>
+								</ul>
+						</div>
+				</div>
+		</div><br><br>
+		<div class="order_details_table mt-4 text-black">
+				<h2>Invoice</h2>
+				<div class="table-responsive">
+						<table class="table">
+								<thead>
+										<tr>
+												<th scope="col">Product</th>
+												<th scope="col">Quantity</th>
+												<th scope="col">Total</th>
+										</tr>
+								</thead>
+								<tbody>
+										<% order.items.forEach(item=> { %>
+										<tr>
+												<td><%= item.productId.description %></td>
+												<td>x <%= item.quantity %></td>
+												<td><%= item.quantity * item.price %></td>
+										</tr>
+										<% }) %>
+										<tr>
+												<td colspan="2">
+														<h4>Subtotal</h4>
+												</td>
+												<td style="font-weight: 500;"><%= order.amount %></td>
+										</tr>
+										<tr>
+												<td colspan="2">
+														<h4>Total</h4>
+												</td>
+												<td style="font-weight: 500;"><%= order.amount %></td>
+										</tr>
+								</tbody>
+						</table>
+				</div>
+		</div>		
 			</div>
 		</div>
 

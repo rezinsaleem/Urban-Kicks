@@ -11,9 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apexcharts": "^3.48.0",
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "easyinvoice": "^3.0.47",
     "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
     "express": "^4.18.2",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.0",
@@ -25,6 +29,7 @@
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
+    "puppeteer": "^22.6.3",
     "razorpay": "^2.9.2",
     "shortid": "^2.2.16",
     "sweetalert2": "^11.10.5"

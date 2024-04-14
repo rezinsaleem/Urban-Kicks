@@ -270,7 +270,7 @@ const LoadOrderComplete = async (req, res) => {
     const categories = await categoryCollection.find({ status: true }).limit(3)
     const orderconfirmation = await orderCollection.findOne({ orderId: req.session.orderId }).populate({
       path: 'items.productId',
-      select: 'name'
+      select: 'name, description'
     })
     res.render('user/order-complete', { order: orderconfirmation, categories, currentPage, title: "Urbankicks - thankyou" })
   } catch (error) {
