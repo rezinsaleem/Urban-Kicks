@@ -553,57 +553,52 @@ const bestSellingProduct = async (req, res) => {
 
 const bestSellingBrands = async (req, res) => {
   try {
+
     const bestSellingBrands = await orderCollection.aggregate([
       {
-        $match: {
-          status: {
-            $nin: ["Cancelled", "returned"]
+          $unwind: "$items"
+      },
+      {
+          $lookup: {
+              from: 'products',
+              localField: 'items.productId',
+              foreignField: '_id',
+              as: 'productDetails'
           }
-        }
       },
       {
-        $unwind: '$items'
+          $unwind: "$productDetails"
       },
       {
-        $lookup: {
-          from: 'products',
-          localField: 'items.productId',
-          foreignField: '_id',
-          as: 'productDetails'
-        }
+          $group: {
+              _id: {
+                  brand: "$productDetails.name" // Assuming product name as brand name
+              },
+              totalSales: { $sum: { $cond: [{ $ifNull: ["$items.totalProductAmount", 0] }, "$items.totalProductAmount", 0] } }
+          }
       },
       {
-        $unwind: "$productDetails"
+          $sort: { totalSales: -1 }
       },
       {
-        $group: {
-          _id: '$productDetails.name',
-          totalSales: { $sum: '$items.quantity' },
-          productName: { $first: '$productDetails.name' }
-        }
+          $limit: 10
       },
       {
-        $sort: { totalSales: -1 }
-      },
-      {
-        $limit: 10
-      },
-      {
-        $project: {
-          _id: 0,
-          productId: '$_id',
-          productName: 1,
-          totalSales: 1
-        }
+          $project: {
+              _id: 0,
+              brand: "$_id.brand",
+              totalSales: 1
+          }
       }
-    ]);
-
-    console.log("bestSellingBrands", bestSellingBrands);
-    res.json({ bestSellingBrands, item: 'Brand' });
+  ]);
+  
+      res.status(200).json({bestSellingBrands,item:'Brand'})
+    
 
   } catch (error) {
-    console.log("error in best selling brand", error);
-    res.status(500).json({ error: "Internal server error" });
+
+      console.log("error in best selling brand",error);
+
   }
 }
 
@@ -612,49 +607,54 @@ const bestSellingCategories=async(req,res)=>{
       
     const bestSellingCategories = await orderCollection.aggregate([
       {
-        $match: {
-          status: {
-            $nin: ["Cancelled", "returned"]
+          $unwind: "$items"
+      },
+      {
+          $lookup: {
+              from: 'products',
+              localField: 'items.productId',
+              foreignField: '_id',
+              as: 'productDetails'
           }
-        }
       },
       {
-        $unwind: '$items'
+          $unwind: "$productDetails"
       },
       {
-        $lookup: {
-          from: 'products',
-          localField: 'items.productId',
-          foreignField: '_id',
-          as: 'productDetails'
-        }
+          $lookup: {
+              from: 'categories',
+              localField: 'productDetails.category',
+              foreignField: '_id',
+              as: 'categoryDetails'
+          }
       },
       {
-        $unwind: '$productDetails'
+          $unwind: "$categoryDetails"
       },
       {
-        $group: {
-          _id: '$productDetails.category',
-          totalSales: { $sum: '$items.quantity' },
-          productName: { $first: '$productDetails.category' }
-        }
+          $group: {
+              _id: {
+                  categoryId: "$categoryDetails._id",
+                  categoryName: "$categoryDetails.name"
+              },
+              totalSales: { $sum: "$items.quantity" }
+          }
       },
       {
-        $sort: { totalSales: -1 }
+          $sort: { totalSales: -1 }
       },
       {
-        $limit: 10
+          $limit: 10
       },
       {
-        $project: {
-          _id: 0,
-          productId: '$_id',
-          productName: 1,
-          totalSales: 1
-        }
+          $project: {
+              _id: 0,
+              categoryId: "$_id.categoryId",
+              categoryName: "$_id.categoryName",
+              totalSales: 1
+          }
       }
-    ]);
-    
+  ]);
 
       res.status(200).json({bestSellingCategories,item:'Category'})
     

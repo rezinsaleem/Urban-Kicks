@@ -31,6 +31,7 @@ const LoadHome = async (req, res) => {
             const searchRegex = new RegExp(searchQuery, 'i'); 
             let searchCriteria = { description: searchRegex, status: true };
             products = await productCollection.find(searchCriteria).exec();
+            
         } else {   
             products = await productCollection.find({ status: true }).exec();
          }
@@ -38,7 +39,7 @@ const LoadHome = async (req, res) => {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
         }
-        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage,searchQuery})
+        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage,searchQuery,scrollToResults: searchQuery && products.length > 0 })
     } catch (error) {
         console.log(error.message);
         res.render('user/servererror')

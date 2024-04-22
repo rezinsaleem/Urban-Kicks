@@ -63,6 +63,7 @@ const addProduct = async (req, res) => {
       sub_category:req.body.subCategory,
       description: req.body.description,
       price: price,
+      brand: req.body.brand, 
       discount: discount,
       discountPrice:discountPrice,
       stock: [{
@@ -136,6 +137,7 @@ const updateProduct = async (req, res) => {
     product.description = req.body.description
     product.price = price
     product.discount=discount
+    product.brand = req.body.brand;
     product.discountPrice=discountPrice
     product.stock = [
       { size: '6', quantity: req.body.size6 },

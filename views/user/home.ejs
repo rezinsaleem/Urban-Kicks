@@ -170,7 +170,7 @@
 						<h2>Best Sellers</h2>
 					</div>
 				</div>
-				<div class="row row-pb-md">
+				<div class="row row-pb-md" id="searchResults">
 					<% if (products.length > 0) { %>
 							<% products.forEach(product => { %>
 									<div class="col-lg-3 mb-4 text-center">
@@ -234,6 +234,20 @@
 				</div>
 			</div>
 		</div>
+
+		<% if (scrollToResults) { %>
+			<script>
+					document.addEventListener('DOMContentLoaded', function () {
+							const searchResultsSection = document.getElementById('searchResults');
+							// Scroll to the search results section
+							if (searchResultsSection) {
+									searchResultsSection.scrollIntoView({ behavior: 'smooth' });
+							}
+					});
+			</script>
+	<% } %>
+	
+	
 
 		<%- include('../partials/userFooter') -%>
 		
