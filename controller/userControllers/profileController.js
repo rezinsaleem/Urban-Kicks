@@ -282,18 +282,63 @@ const ordercancelling = async (req, res) => {
 const ordertracking = async (req, res) => {
     try {
         currentPage = 'profile';
-        const id = req.params.id
+        const id = req.params.id;
+        const successMessage = req.flash('success');
         const categories = await categoryCollection.find({ status: true }).limit(3)
         const order = await orderCollection.findOne({ _id: id }).populate({
             path: 'items.productId',
             select: 'name image description'
         })
-        res.render('user/ordertracking', { currentPage, order, categories })
+        res.render('user/ordertracking', { currentPage, order, categories, successMessage })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
     }
 }
+
+const orderfailed = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const ordersId = orderId.trim();
+        const userId = req.session.userId;
+        const order = await orderCollection.findOne({ orderId: ordersId });
+        const { pay, wallet } = req.body;
+        const parsedWallet = parseInt(wallet);
+        if (pay == 'paymentPending') {
+            res.redirect(`/order-tracking/${order._id}`)
+        } else if (pay == 'wallet') {
+            const update = await orderCollection.updateOne({ orderId: ordersId }, {
+                wallet: parsedWallet,
+                payment: pay,
+                status: "pending",
+                updated: new Date()
+            })
+            const userWallet = await walletCollection.findOne({ userId: userId })
+            userWallet.history.push({
+                transaction: "Debited",
+                amount: parsedWallet,
+                date: new Date(),
+                reason: "Product Purchased"
+            })
+            await userWallet.save();
+            const user = await userCollection.findOne({ _id: userId })
+            user.wallet -= parsedWallet;
+            await user.save();
+        } else {
+            const update = await orderCollection.updateOne({ orderId: ordersId }, {
+                payment: pay,
+                status: "pending",
+                updated: new Date()
+            })
+        }
+        req.flash('success', 'Your Order is Successfull!')
+        res.redirect(`/order-tracking/${order._id}`)
+    } catch (error) {
+        console.log(error);
+        res.render('user/servererror');
+    }
+}
+
 
 const downloadInvoice=async(req,res)=>{
     try{
@@ -515,4 +560,5 @@ module.exports = {
    walletTopup,
    walletupi,
    downloadInvoice,
+   orderfailed,
 }

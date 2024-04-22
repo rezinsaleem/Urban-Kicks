@@ -4,6 +4,7 @@
 <head>
 	<title>Urban Kicks - <%= category.name %>
 	</title>
+	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="/assets/images/icon uk.jpg">
@@ -54,12 +55,13 @@
 							<div id="colorlib-logo"><a href="/">Urban Kicks</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-							<form action="/" id="searchForm" class="search-wrap">
+							<form action="#" id="searchForm" class="search-wrap">
 								<div class="form-group">
-									 <input type="search" name="search" id="searchInput" class="form-control search"  placeholder="Search" >
-									 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+										<input type="search" name="search" id="searchInput" class="form-control search" placeholder="Search">
+										<button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
 								</div>
-						 </form>
+						</form>
+						
 						</div>
 					</div>
 					<div class="row">
@@ -172,7 +174,6 @@
 										<li><a href="#" data-sort="highToLow">Price: high to low</a></li>
 										<li><a href="#" data-sort="aToZ">aA - zZ</a></li>
 										<li><a href="#" data-sort="zToA">zZ - aA</a></li>
-										<!-- <li><a href="#" data-sort="newArrivals">New arrivals</a></li> -->
 									</ul>
 								</div>
 							</div>
@@ -204,7 +205,7 @@
 											<h2><a href="/shopSingle/<%= product._id %>">
 													<%= product.name %>
 												</a></h2>
-											<p>
+											<p id="description">
 												<%= product.description %>
 											</p>
 											<span class="price text-primary" style="line-height: 2; font-size: 18px;">
@@ -363,6 +364,18 @@
 					event.preventDefault();
 
 					const sortType = event.target.dataset.sort;
+
+				
+                // Remove 'selected' class and normal font weight from all other list items
+                for (const item of sortOptions) {
+                    item.classList.remove('selected');
+                    item.style.fontWeight = 'normal';
+                }
+                // Add 'selected' class and bold font weight to the clicked list item
+                event.target.classList.add('selected');
+                event.target.style.fontWeight = 'bold';
+          
+
 					sortProducts(sortType);
 				});
 			}
@@ -375,6 +388,7 @@
 					return;
 				}
 
+				
 				let products = Array.from(productContainer.children);
 
 				products.sort((a, b) => {
@@ -385,9 +399,9 @@
 						case 'highToLow':
 							return parseFloat(b.querySelector('.price').innerText.split('₹')[1]) - parseFloat(a.querySelector('.price').innerText.split('₹')[1]);
 						case 'aToZ':
-							return a.querySelector('h2 a').innerText.localeCompare(b.querySelector('h2 a').innerText);
+							return a.querySelector('#description').innerText.localeCompare(b.querySelector('#description').innerText);
 						case 'zToA':
-							return b.querySelector('h2 a').innerText.localeCompare(a.querySelector('h2 a').innerText);
+							return b.querySelector('#description').innerText.localeCompare(a.querySelector('#description').innerText);
 						case 'newArrivals':
               return new Date(b.createdAt) - new Date(a.createdAt);
 						default:
@@ -406,13 +420,58 @@
 	</script>
 
 <script>
-	document.getElementById('searchForm').addEventListener('submit', function(event) {
-			const searchInput = document.getElementById('searchInput').value.trim();
-			if (!searchInput) {
-					event.preventDefault(); 
-			}
-	});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const productContainer = document.getElementById('productContainer');
+    let originalProducts = Array.from(productContainer.children);
+
+    if (productContainer) {
+        searchForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            console.log("Search query:", searchQuery);
+
+            // Create a regex pattern for the search query
+            const regex = new RegExp(searchQuery, 'i');
+
+            // Filter products based on the regex pattern from the original list
+            const filteredProducts = originalProducts.filter(product => {
+                const productNameElement = product.querySelector('#description');
+                if (productNameElement) {
+                    const productName = productNameElement.innerText.toLowerCase();
+                    return regex.test(productName);
+                }
+                return false;
+            });
+            console.log("Filtered products:", filteredProducts);
+
+            // Clear the product container and append filtered products
+            productContainer.innerHTML = '';
+            if (filteredProducts.length > 0) {
+                filteredProducts.forEach(product => {
+                    productContainer.appendChild(product);
+                });
+            } else {
+                // If no search matches found, display a message
+                const noMatchMessage = document.createElement('p');
+                noMatchMessage.textContent = 'No products match your search.';
+								noMatchMessage.style.fontWeight = 'bold'; 
+                productContainer.appendChild(noMatchMessage);
+            }
+
+						productContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+    } else {
+        console.error('Product container not found');
+    }
+});
+
 </script>
+
+
+
 
 	<!-- jQuery -->
 	<script src="/js/jquery.min.js"></script>

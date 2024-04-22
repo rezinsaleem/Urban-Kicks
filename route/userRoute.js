@@ -84,6 +84,7 @@ userRouter.get('/cancelorder/:id', Auth.isLoggedUser, profileController.ordercan
 userRouter.post('/returnReason',profileController.returnReason)
 userRouter.get('/order-tracking/:id', Auth.isLoggedUser, profileController.ordertracking)
 userRouter.get('/downloadInvoice/:id',Auth.isLoggedUser,profileController.downloadInvoice)
+userRouter.post('/reOrder/:id', Auth.isLoggedUser, profileController.orderfailed)
 
 userRouter.get('/resetpassword',Auth.isLoggedUser,profileController.LoadResetPassword)
 userRouter.post('/passwordUpdate',Auth.isLoggedUser,profileController.updatePassword)
