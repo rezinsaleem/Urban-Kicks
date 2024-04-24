@@ -131,12 +131,14 @@
 									<span>Remove</span>
 								</div>
 							</div>
+							console.log(cart)
 							<% cart.item.forEach(function(item,index) { %>
 								<div class="product-cart d-flex">
 									<div class="one-forth" style="margin-left: 15px;">
+										console.log(item)
 										<a href="/shopSingle/<%= item.productId._id %>"><img src="/<%= item.productId.image[0] %>" style="height: 125px; width: 100px;"></a>
 										<div class="display-tc">
-											<h3><a href="/shopSingle/<%= item.productId._id %>">
+											<h3><a href="/shopSingle/<%= item.productId?._id %>">
 												<%= item.productId.description %>
 											</a></h3> 
 										</div>

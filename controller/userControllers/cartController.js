@@ -23,7 +23,7 @@ const addtocart = async (req, res) => {
       _id: productId,
       "stock.size": size,
     });
-
+// hdgsd
     const selectedStock = stock.stock.find((item) => {
       return item.size == size;
     });
@@ -80,7 +80,7 @@ const LoadCart = async (req, res) => {
         select: 'name stock image description price'
       });
     } else if (!cart || !cart.item) {
-      cart = new cartModel({
+      cart = new cartCollection({
         sessionId: req.session.id,
         item: [],
         total: 0
