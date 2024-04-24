@@ -16,7 +16,7 @@ const LoadAdmin = async(req,res)=>{
       return res.redirect('/admin/dashboard')
   }
     const errorMessages = req.flash('error')
-    res.render('admin/adminlogin',{errorMessages})
+    res.render('admin/adminLogin',{errorMessages})
   }catch(err){
     console.log(err)
     res.render('user/servererror')
