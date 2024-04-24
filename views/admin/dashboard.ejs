@@ -99,7 +99,8 @@
             </div>
             <div class="content">
               <h5 class="card-title mb-9 fw-semibold">  Total Orders  </h5>
-              <h4 class="count fw-semibold mb-3">  <%= orders[0].totalOrders %></h4>
+              <h4 class="count fw-semibold mb-3">  <%= orders.length > 0 ? orders[0].totalOrders : 'No orders' %></h4>
+
                 <span class="label">orders</span>
             </div>
         </div>
@@ -130,7 +131,8 @@
             </div>
             <div class="content">
               <h5 class="card-title mb-9 fw-semibold"> Total Earnings </h5>
-              <h4 class="count fw-semibold mb-3">₹<%= orders[0].totalAmount %></h4>
+              <h4 class="count fw-semibold mb-3">₹<%= orders.length > 0 ? orders[0].totalAmount : '0' %></h4>
+
                 <span class="label">revenue</span>
             </div>
         </div>
