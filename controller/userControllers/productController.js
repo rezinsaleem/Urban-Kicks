@@ -13,7 +13,8 @@ const LoadShop = async (req, res) => {
       const category = await categoryCollection.findById(categoryId)
       const products = await productCollection.find({ status: true, category: categoryId })
       const subcategories = await subcatCollection.find({ p_category: categoryId, status: true}).populate('p_category');
-      res.render('user/shop', {  subcategories, products ,category ,categories,currentPage});
+      const itemCount = req.session.cartCount;
+      res.render('user/shop', {  subcategories, products ,category ,categories,currentPage,itemCount});
   } catch (error) {
       console.log(error.message);
       res.render('user/servererror');
@@ -31,7 +32,8 @@ const shopSingle = async (req, res) => {
       if (product.totalstock == 0) {
           pass = 'Out of Stock'
       }
-      res.render('user/product-detail',{product,categories,pass});
+      const itemCount = req.session.cartCount;
+      res.render('user/product-detail',{product,categories,pass,itemCount});
   } catch (error) {
       console.log(error);
       res.render('user/servererror');
@@ -79,7 +81,8 @@ const LoadWishlist = async (req, res) => {
           path: 'item.productId',
           select: "_id name description image"
       })
-      res.render('user/wishlist', {title:"Urbankicks - Wishlist", fav: fav, categories ,currentPage})
+      const itemCount = req.session.cartCount;
+      res.render('user/wishlist', {title:"Urbankicks - Wishlist", fav: fav,itemCount,categories ,currentPage})
   } catch (error) {
       console.log(error);
       res.render('user/servererror');

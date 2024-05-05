@@ -29,7 +29,9 @@
 								<% }); %>
 									<li class="<%= currentPage === 'about' ? 'active' : '' %>"><a href="/about">About</a></li>
 									<li class="<%= currentPage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact</a></li>
-									<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+									<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> <% if (itemCount&&itemCount>0) { %>
+										<span class="count">[<%= itemCount %>]</span> 
+									<% } %></a></li>
 									<li class="wishlist <%= currentPage === 'wishlist' ? 'active' : '' %>"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
 									<li class="user-profile <%= currentPage === 'profile' ? 'active' : '' %>"><a href="/profile"><i class="icon-user2"></i></a></li>
 								 

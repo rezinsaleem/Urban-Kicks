@@ -4,6 +4,7 @@
 	<title><%=product.name%> - <%=product.description%></title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	 <link rel="icon" href="/assets/images/icon uk.jpg">
 
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
@@ -90,7 +91,9 @@
 								<% }); %>
 									<li><a href="/about">About</a></li>
 									<li><a href="/contact">Contact</a></li>
-									<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+									<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i><% if (itemCount&&itemCount>0) { %>
+										<span class="count">[<%= itemCount %>]</span> 
+									<% } %></a></li>
 									<li class="wishlist"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
 									<li class="user-profile"><a href="/profile"><i class="icon-user2"></i></a></li>
 								 

@@ -48,8 +48,8 @@ const LoadCheckOut = async (req, res) => {
       couponCode: { $nin: user.usedCoupons },
       status: true,
     });
-
-    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data, categories, currentPage, successMessages, errorMessages, session: req.session })
+    const itemCount = req.session.cartCount;
+    res.render('user/checkout', { title: "Urbankicks - checkout ", address, availableCoupons, data,itemCount, categories, currentPage, successMessages, errorMessages, session: req.session })
   } catch (error) {
     console.log(error)
     res.render("user/servererror")
@@ -272,6 +272,7 @@ const LoadOrderComplete = async (req, res) => {
       path: 'items.productId',
       select: 'name, description'
     })
+    req.session.cartCount = 0;
     res.render('user/order-complete', { order: orderconfirmation, categories, currentPage, title: "Urbankicks - thankyou" })
   } catch (error) {
     console.log(error)

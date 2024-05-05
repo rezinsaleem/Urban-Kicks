@@ -44,7 +44,9 @@
 								<% }); %>
 									<li class="<%= currentPage === 'about' ? 'active' : '' %>"><a href="/about">About</a></li>
 									<li class="<%= currentPage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact</a></li>
-									<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> [0]</a></li>
+									<li class="cart <%= currentPage === 'cart' ? 'active' : '' %>"><a href="/cart"><i class="icon-shopping-cart"></i> <% if (itemCount&&itemCount>0) { %>
+										<span class="count">[<%= itemCount %>]</span> 
+									<% } %></a></li>
 									<li class="wishlist <%= currentPage === 'wishlist' ? 'active' : '' %>"><a href="/wishlist"><i class="icon-heart2"></i></a></li>
 									<li class="user-profile <%= currentPage === 'profile' ? 'active' : '' %>"><a href="/profile"><i class="icon-user2"></i></a></li>
 								 
@@ -163,49 +165,66 @@
 	</div>
 	
 
-		<div class="colorlib-product">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
-						<h2>Best Sellers</h2>
-					</div>
-				</div>
-				<div class="row row-pb-md" id="searchResults">
-					<% if (products.length > 0) { %>
-							<% products.forEach(product => { %>
-									<div class="col-lg-3 mb-4 text-center">
-											<div class="product-entry border">
-													<a href="/shopSingle/<%= product._id %>" class="prod-img">
-															<img src="<%= product.image[0] %>" class="img-fluid" alt="<%= product.name %>">
-													</a>
-													<div class="desc">
-															<h2><a href="/shopSingle/<%= product._id %>"><%= product.name %></a></h2>
-															<p><%= product.description %></p>
-															<span class="price text-primary" style="line-height: 2; font-size: 18px;">
-																<span style="text-decoration: line-through;"><%= product.price %></span>&nbsp;
-																₹<%= product.discountPrice %>
-															</span>
-															<p class="text-primary my-0" style="line-height: 0.5;">
-																<%= product.discount %>% OFF
-															</p>
-													</div>
-											</div>
-									</div>
-							<% }); %>
-					<% } else { %>
-							<h3 class="text-center ml-5" style="color: #585757; margin-top: 20px; margin-bottom: 50px;">
-									No matching results found. <a href="/" class="text-primary">Explore our products</a> and add new kicks to your collection!
-							</h3>
-					<% } %>			
-			</div>
-			
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<p><a href="#" class="btn btn-primary btn-lg">Shop All Products</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="colorlib-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+                <h2>Best Sellers</h2>
+            </div>
+        </div>
+        <div class="row row-pb-md" id="searchResults">
+            <% products.slice(0, 8).forEach(product => { %>
+            <div class="col-lg-3 mb-4 text-center">
+                <div class="product-entry border">
+                    <a href="/shopSingle/<%= product._id %>" class="prod-img">
+                        <img src="<%= product.image[0] %>" class="img-fluid" alt="<%= product.name %>">
+                    </a>
+                    <div class="desc">
+                        <h2><a href="/shopSingle/<%= product._id %>"><%= product.name %></a></h2>
+                        <p><%= product.description %></p>
+                        <span class="price text-primary" style="line-height: 2; font-size: 18px;">
+                            <span style="text-decoration: line-through;"><%= product.price %></span>&nbsp;
+                            ₹<%= product.discountPrice %>
+                        </span>
+                        <p class="text-primary my-0" style="line-height: 0.5;">
+                            <%= product.discount %>% OFF
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+        <div class="row" id="allProducts" style="display: none;">
+            <% products.slice(8).forEach(product => { %>
+            <div class="col-lg-3 mb-4 text-center">
+                <div class="product-entry border">
+                    <a href="/shopSingle/<%= product._id %>" class="prod-img">
+                        <img src="<%= product.image[0] %>" class="img-fluid" alt="<%= product.name %>">
+                    </a>
+                    <div class="desc">
+                        <h2><a href="/shopSingle/<%= product._id %>"><%= product.name %></a></h2>
+                        <p><%= product.description %></p>
+                        <span class="price text-primary" style="line-height: 2; font-size: 18px;">
+                            <span style="text-decoration: line-through;"><%= product.price %></span>&nbsp;
+                            ₹<%= product.discountPrice %>
+                        </span>
+                        <p class="text-primary my-0" style="line-height: 0.5;">
+                            <%= product.discount %>% OFF
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p><a href="#" id="showAllButton" class="btn btn-primary btn-lg">Show All Products</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 		
 
 		<div class="colorlib-partner">
@@ -246,6 +265,13 @@
 					});
 			</script>
 	<% } %>
+
+	<script>
+    document.getElementById('showAllButton').addEventListener('click', function() {
+        document.getElementById('allProducts').style.display = 'block';
+        document.getElementById('showAllButton').style.display = 'none';
+    });
+</script>
 	
 	
 

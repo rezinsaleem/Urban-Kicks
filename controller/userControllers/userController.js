@@ -5,7 +5,9 @@ const categoryCollection = require('../../model/categoryModel')
 const bcrypt = require('bcrypt')
 const otpgenerator = require('otp-generator')
 const nodemailer = require('nodemailer')
-const passport = require('passport')
+const passport = require('passport');
+const cartCollection = require('../../model/cartModel');
+const mongoose = require('mongoose')
 
 
 const LoadSignIn = async (req, res) => {
@@ -24,6 +26,7 @@ const LoadSignIn = async (req, res) => {
 
 const LoadHome = async (req, res) => {
     try {
+        const id = req.session.userId;
         const currentPage = 'home';
         const categories = await categoryCollection.find({status:true}).limit(3)
         const searchQuery = req.query.search;
@@ -39,7 +42,20 @@ const LoadHome = async (req, res) => {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
         }
-        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,currentPage,searchQuery,scrollToResults: searchQuery && products.length > 0 })
+
+        const result = await cartCollection.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(id) } },
+            { $unwind: '$item' },
+            { $group: { _id: null, itemCount: { $sum: 1 } } },
+        ])
+       
+        if (result.length > 0) {
+            const itemCount = result[0].itemCount;
+            req.session.cartCount = itemCount;
+        }
+        const itemCount = req.session.cartCount;
+
+        res.render('user/home', { title: "UrbanKicks-Home", products ,categories,itemCount,currentPage,searchQuery,scrollToResults: searchQuery && products.length > 0 })
     } catch (error) {
         console.log(error.message);
         res.render('user/servererror')

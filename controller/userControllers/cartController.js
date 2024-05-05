@@ -47,7 +47,7 @@ const addtocart = async (req, res) => {
         size: size,
         quantity: parseInt(quantity, 10),
         price,
-        total: Nquantity * price
+        total: (Nquantity * price).toFixed(2)
       });
     }
 
@@ -166,7 +166,7 @@ const updateCart = async (req, res) => {
     cart.item[itemIndex].quantity = updatedQuantity;
 
     const newProductTotal = price * updatedQuantity;
-    cart.item[itemIndex].total = newProductTotal;
+    cart.item[itemIndex].total = newProductTotal.toFixed(2);
     await cart.save();
     const total = cart.item.reduce((acc, item) => acc + item.total, 0);
     cart.total = total;

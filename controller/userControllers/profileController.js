@@ -27,7 +27,8 @@ const LoadProfile = async (req, res) => {
             path: 'items.productId',
             select: 'name image description'
         })
-        res.render('user/user-profile', { title: "User-Profile", user, categories, currentPage, orders,successMessages })
+      const itemCount = req.session.cartCount;
+        res.render('user/user-profile', { title: "User-Profile", user, categories,itemCount, currentPage, orders,successMessages })
     } catch (err) {
         console.log(err)
         res.render('user/servererror')
@@ -44,7 +45,8 @@ const showaddress=async (req,res)=>{
         const categories=await categoryCollection.find({status:true}).limit(3)
         const data = await addressCollection.findOne({ userId: userId })
         req.session.checkoutSave=false;
-        res.render('user/address', { title:'UrbanKicks - Addresses',userData: data ,categories,currentPage,errorMessages,successMessages})
+      const itemCount = req.session.cartCount;
+        res.render('user/address', { title:'UrbanKicks - Addresses',itemCount,userData: data ,categories,currentPage,errorMessages,successMessages})
     }catch(error){
         console.log(error)
         res.render('user/servererror')
@@ -57,7 +59,8 @@ const LoadAddAddress = async (req, res) => {
         const categories = await categoryCollection.find({ status: true }).limit(3)
         const id = req.session.userId;
         const user = await userCollection.findOne({ _id: id })
-        res.render('user/addAddress', { title: "Urban Kicks - profile", categories, currentPage, user })
+      const itemCount = req.session.cartCount;
+        res.render('user/addAddress', { title: "Urban Kicks - profile", categories,itemCount, currentPage, user })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
@@ -129,7 +132,7 @@ const LoadEditAddress = async (req, res) => {
         const userId = req.session.userId;
         const categories = await categoryCollection.find({ status: true }).limit(3)
         const id = req.params.id;
-        
+      const itemCount = req.session.cartCount;
         const address = await addressCollection.aggregate([
             {
                 $match: { userId: new mongoose.Types.ObjectId(userId) }
@@ -142,10 +145,10 @@ const LoadEditAddress = async (req, res) => {
             }
         ]);
 
-        res.render('user/editAddress', { title:"Urban Kicks- edit address", adress: address[0], categories , currentPage });
+        res.render('user/editAddress', { title:"Urban Kicks- edit address", adress: address[0],itemCount, categories , currentPage });
     } catch (error) {
         console.log(error);
-        res.render('user/serverError');
+        res.render('user/servererror');
     }
 }
 
@@ -289,7 +292,8 @@ const ordertracking = async (req, res) => {
             path: 'items.productId',
             select: 'name image description'
         })
-        res.render('user/ordertracking', { currentPage, order, categories, successMessage })
+        const itemCount = req.session.cartCount;
+        res.render('user/ordertracking', { currentPage, order,itemCount, categories, successMessage })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
@@ -437,7 +441,8 @@ const LoadResetPassword = async (req, res) => {
         const currentPage = 'profile';
         const categories = await categoryCollection.find({ status: true }).limit(3)
         const pass = req.flash('pass')
-        res.render('user/resetpassword', { title:"Urbankicks - Reset password ",pass, categories,currentPage })
+      const itemCount = req.session.cartCount;
+        res.render('user/resetpassword', { title:"Urbankicks - Reset password ",pass,itemCount, categories,currentPage })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
@@ -490,7 +495,8 @@ const LoadWallet = async (req, res) => {
             { $unwind: "$history" },
             { $sort: { "history.date": -1 } }
         ]);
-        res.render('user/wallet', { wallet: wallet, user: user, categories,title:"Urbankicks - Wallet",currentPage })
+      const itemCount = req.session.cartCount;
+        res.render('user/wallet', { wallet: wallet, user: user,itemCount, categories,title:"Urbankicks - Wallet",currentPage })
     } catch (error) {
         console.log(error)
         res.render('user/servererror')
