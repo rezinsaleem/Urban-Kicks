@@ -9,7 +9,7 @@ const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET ;
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://www.urbankicks.site/auth/facebook/callback",
+    callbackURL: "https://www.urbankicks.site/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails'] 
   },
   async function(request, accessToken, refreshToken, profile, done) {
