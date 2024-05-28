@@ -27,10 +27,8 @@ const addCategory = async(req,res)=>{
     const categoryDescription = req.body.description;
     const discount=req.body.discount;
     const categoryExist = await categoryCollection.findOne({ name: { $regex: new RegExp("^" + categoryName + "$", "i") } });
-    console.log(categoryName)
 
     if (categoryExist) {
-      console.log("Already Exist");
       req.flash('error', 'Category Already Exists');
       return res.redirect('/admin/addcategory');
   } else {
@@ -79,7 +77,6 @@ const updateCategory = async(req,res)=>{
     if (isNameModified) {
       const catExist = await categoryCollection.findOne({ name: { $regex: new RegExp("^" + catName + "$", "i") } });
       if (catExist) {
-          console.log("Already Exist");
           req.flash('catError', 'Category Already Exists');
           return res.redirect('/admin/updateCategory/' + id);
       }
@@ -95,7 +92,6 @@ const updateCategory = async(req,res)=>{
         element.discountPrice = element.price - (element.price * (element.discount / 100));
         await element.save();
     });
-    console.log(categoryDiscount);
     res.redirect('/admin/categories');
   }catch(err){
     console.log(err)
@@ -140,10 +136,8 @@ const addSubcategory = async(req,res)=>{
     const parentCategory = req.body.parentCategory;
     const description = req.body.description;
     const subcatExist = await subcatCollection.findOne({ name: { $regex: new RegExp("^" + categoryName + "$", "i") }, p_category: parentCategory  });
-    console.log(categoryName)
     
     if (subcatExist) {
-      console.log("Already Exist");
       req.flash('error', 'Sub-Category Already Exists');
       return res.redirect('/admin/addsubcategory');
     } else {

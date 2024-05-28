@@ -35,7 +35,6 @@ const createCoupon=async(req,res)=>{
   
       if (couponExists) {
           req.flash('couponExists', "Coupon already exists")
-          console.log("Coupon exists");
           res.redirect('/admin/addcoupon');
       }
       else {
@@ -47,7 +46,7 @@ const createCoupon=async(req,res)=>{
               maxRedeem:maxRedeem,
               expiry:expiry 
               })
-          console.log("COUPON created");
+
           req.flash('couponAdded',"Coupon added successfully!")
           res.redirect('/admin/coupons');
 
@@ -118,7 +117,6 @@ const updateCoupon=async(req,res)=>{
               
           );
           req.flash('couponAdded',"Coupon updated successfully!")
-          console.log("COUPON created");
           res.redirect('/admin/coupons');
   
   }

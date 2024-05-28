@@ -103,238 +103,228 @@
 		</div>
 
 
-<div class="container mt-5 text-center"> 
-    <% if(successMessage && successMessage.length> 0){ %>
-        <div id="successMessage">
-            <h2 class="text-success">
-                <%= successMessage %>
-            </h2>
-        </div>
-        <% } %>
-  <div class="row">
-      <div class="col-12 col-md-10 hh-grayBox mx-auto text-center pt-4 pb-4">
-          <% if (order.status==='pending' ) { %>
-              <div class="row justify-content-between">
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
-                              day: 'numeric' }) %><br>Ordered
-                      </p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Processing</p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Shipped</p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Delivered</p>
-                  </div>
-              </div>
-          <% } else if (order.status==='processing' ) { %>
-              <!-- Adjusted alignment -->
-              <div class="row justify-content-between">
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Ordered</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short' ,
-                              day: 'numeric' }) %><br>Processing
-                      </p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Shipped</p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Delivered</p>
-                  </div>
-              </div>
-          <% } else if (order.status==='shipped' ) { %>
-              <!-- Adjusted alignment -->
-              <div class="row justify-content-between">
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Ordered</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Processing</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete "></span>
-                      <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short'
-                              , day: 'numeric' }) %><br>Shipped
-                      </p>
-                  </div>
-                  <div class="order-tracking">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Delivered</p>
-                  </div>
-              </div>
-          <% } else if (order.status==='delivered' ) { %>
-              <!-- Adjusted alignment -->
-              <div class="row justify-content-between">
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Ordered</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Processing</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete"></span>
-                      <p class="text-dark">Shipped</p>
-                  </div>
-                  <div class="order-tracking completed">
-                      <span class="is-complete btn-block"></span>
-                      <p class=" bg-dark rounded px-3" style="color: aliceblue;">
-                          <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
-                              month: 'short' , day: 'numeric' }) %><br>Delivered
-                      </p>
-                  </div>
-              </div>
-          <% } else if (order.status==='Cancelled' ) { %>
-            <!-- Adjusted alignment -->
-            <div class="order-tracking-item completed cancelled">
-                <span class="is-complete"></span>
-                <p class="text-dark">Ordered</p>
-            </div>
-            <div class="order-tracking-item completed cancelled">
-                <span class="is-complete"></span>
-                <p class="text-dark">Cancel Requested</p>
-            </div>
-            <div class="order-tracking-item completed cancelled">
-                <span class="is-complete"></span>
-                <p class="text-dark">Accepted</p>
-            </div>
-            <div class="order-tracking-item completed cancelled">
-                <span class="is-complete"></span>
-                <p class="bg-dark rounded px-3 text-white">
-                    <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
-                        month: 'short' , day: 'numeric' }) %><br>Cancelled
-                </p>
-            </div>
-            <% } else if (order.status==='paymentPending' ) { %>
-                <div>
-                    <h2 class="text-danger">Your Order is Pending due to Unfinished
-                        Payment.</h2>
+        <div class="container mt-5 text-center"> 
+            <% if(successMessage && successMessage.length> 0){ %>
+                <div id="successMessage">
+                    <h2 class="text-success">
+                        <%= successMessage %>
+                    </h2>
                 </div>
-                <% } else { %>
-                    <h2 class="text-dark">Your Order Returned.</h2>
+            <% } %>
+            <div class="row">
+                <div class="col-12 col-md-10 hh-grayBox mx-auto text-center pt-4 pb-4">
+                    <% if (order.status==='pending' ) { %>
+                        <div class="row justify-content-between text-center">
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="bg-dark rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Ordered
+                                </p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Processing</p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Shipped</p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Delivered</p>
+                            </div>
+                        </div>
+                    <% } else if (order.status==='processing' ) { %>
+                        <div class="row justify-content-between text-center">
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Ordered</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="bg-dark rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Processing
+                                </p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Shipped</p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Delivered</p>
+                            </div>
+                        </div>
+                    <% } else if (order.status==='shipped' ) { %>
+                        <div class="row justify-content-between text-center">
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Ordered</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Processing</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="bg-dark rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Shipped
+                                </p>
+                            </div>
+                            <div class="order-tracking col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Delivered</p>
+                            </div>
+                        </div>
+                    <% } else if (order.status==='delivered' ) { %>
+                        <div class="row justify-content-between text-center">
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Ordered</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Processing</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Shipped</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="bg-dark rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Delivered
+                                </p>
+                            </div>
+                        </div>
+                    <% } else if (order.status==='Cancelled' ) { %>
+                        <div class="row justify-content-between text-center">
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Ordered</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Cancel Requested</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="text-dark">Accepted</p>
+                            </div>
+                            <div class="order-tracking completed col-12 col-sm-3">
+                                <span class="is-complete"></span>
+                                <p class="bg-dark rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Cancelled
+                                </p>
+                            </div>
+                        </div>
+                    <% } else if (order.status==='paymentPending' ) { %>
+                        <div>
+                            <h2 class="text-danger">Your Order is Pending due to Unfinished Payment.</h2>
+                        </div>
+                    <% } else { %>
+                        <h2 class="text-dark">Your Order Returned.</h2>
                     <% } %>
-      </div>
-  </div>
-
-  <h5 class="text-dark">Order ID: <span id="orderId"><%= order.orderId %></span></h5>
-
-  <p class="text-dark">Delivery Address: <%= order.address[0].save_as %>,
-      <%= order.address[0].housename %>,
-      <%= order.address[0].city %>,
-      <%= order.address[0].pincode %>
-  </p>
-  <table class="table">
-      <thead>
-          <tr>
-              <th class="text-dark">Image</th>
-              <th class="text-dark">Product Name</th>
-              <th class="text-dark">Quantity</th>
-              <th class="text-dark">Price</th>
-              <th class="text-dark">Total</th>
-              <th class="text-dark">Payment</th>
-          </tr>
-      </thead>
-      <tbody>
-          <% order.items.forEach(item=> { %>
-              <tr>
-                <td>
-                    <img src="/<%= item.productId.image[0] %>" width="75" class="img-thumbnail" alt="image">
-                </td>
-                  <td class="text-center align-middle">
-                      <%= item.productId.description %>
-                  </td>
-                  <td class="text-center align-middle">
-                      <%= item.quantity %>
-                  </td>
-                  <td class="text-center  align-middle">
-                      <%= item.price %>
-                  </td>
-                  <td class="text-center align-middle">
-                      <%= item.quantity * item.price %>
-                  </td>
-                    <td class="text-center  align-middle">
-                        <%= order.payment %>
-                    </td>
-              </tr>
-          <% }); %>
-          <tr>
-              <td class="text-dark"></td>
-              <td class="text-dark"></td>
-              <td class="text-center"></td>
-              <td class="text-center">
-                <b>Total Bill Amount </b>
-              </td>
-              <td class="text-center" style="font-weight: 500;"> ₹<span id="total">
-                <%= order.amount %>
-            </span> </td>
-          </tr>
-      </tbody>
-  </table>
-</div><br> <!-- Closed the container -->
-<% if(order.status=="delivered"){ %>
-    <div class="text-center mt-4">
-        <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-success btn-md" download>Download Invoice</a>
-      </div>
-      
-      <% } else if(order.status=="paymentPending" ){ %>
-        <div class="container mt-5 text-center">
-            <h2 class="text-dark">Proceed with Payment</h2>
-            <hr>
-            <form id="orderform">
-                <input type="hidden" id="pay" name="pay" value="0" />
-                <input type="hidden" id="wallet" name="wallet" value="0" />
-                <!-- <input type="hidden" id="total" name="total" value= "<%= order.amount %>" /> -->
-                <div class="row justify-content-center">
-                    <div class="col-md-4 mb-3">
-                        <div class="d-flex flex-column border py-2 btn">
-                            <label class="flex-grow-1 d-flex align-items-center">
-                                <input type="radio" class="mt-2 ml-1" name="paymentOption" value="cashOnDelivery" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
-                                <span class="d-block ml-3 mt-1 text-primary text-center">Cash on Delivery</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="d-flex flex-column border py-2 btn">
-                            <label class="flex-grow-1 d-flex align-items-center">
-                                <input type="radio" class="mt-2 ml-1" name="paymentOption" value="wallet" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
-                                <span class="d-block ml-3 text-primary mt-1">Wallet Payment</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="d-flex flex-column border py-2 btn">
-                            <label class="flex-grow-1 d-flex align-items-center">
-                                <input type="radio" class="mt-2 ml-1" name="paymentOption" value="upi" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
-                                <span class="d-block ml-3 mt-1 text-primary">Online Payment</span>
-                            </label>
-                        </div>
-                    </div>
                 </div>
-                <button id="placeOrderBtn" class="btn btn-primary btn-sm py-2 btn-block " type="submit">Proceed Payment</button>
-            </form>
-        </div>
+            </div>
         
+            <h5 class="text-dark">Order ID: <span id="orderId"><%= order.orderId %></span></h5>
+        
+            <p class="text-dark">Delivery Address: <%= order.address[0].save_as %>,
+                <%= order.address[0].housename %>,
+                <%= order.address[0].city %>,
+                <%= order.address[0].pincode %>
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-dark">Image</th>
+                        <th class="text-dark">Product Name</th>
+                        <th class="text-dark">Quantity</th>
+                        <th class="text-dark">Price</th>
+                        <th class="text-dark">Total</th>
+                        <th class="text-dark">Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.items.forEach(item=> { %>
+                        <tr>
+                            <td>
+                                <img src="/<%= item.productId.image[0] %>" width="75" class="img-thumbnail" alt="image">
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= item.productId.description %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= item.quantity %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= item.price %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= item.quantity * item.price %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= order.payment %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                    <tr>
+                        <td class="text-dark"></td>
+                        <td class="text-dark"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">
+                            <b>Total Bill Amount </b>
+                        </td>
+                        <td class="text-center" style="font-weight: 500;"> ₹<span id="total">
+                            <%= order.amount %>
+                        </span> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><br> <!-- Closed the container -->
+        <% if(order.status=="delivered"){ %>
+            <div class="text-center mt-4">
+                <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-success btn-md" download>Download Invoice</a>
+            </div>
+        <% } else if(order.status=="paymentPending" ){ %>
+            <div class="container mt-5 text-center">
+                <h2 class="text-dark">Proceed with Payment</h2>
+                <hr>
+                <form id="orderform">
+                    <input type="hidden" id="pay" name="pay" value="0" />
+                    <input type="hidden" id="wallet" name="wallet" value="0" />
+                    <div class="row justify-content-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex flex-column border py-2 btn">
+                                <label class="flex-grow-1 d-flex align-items-center">
+                                    <input type="radio" class="mt-2 ml-1" name="paymentOption" value="cashOnDelivery" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
+                                    <span class="d-block ml-3 mt-1 text-primary text-center">Cash on Delivery</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex flex-column border py-2 btn">
+                                <label class="flex-grow-1 d-flex align-items-center">
+                                    <input type="radio" class="mt-2 ml-1" name="paymentOption" value="wallet" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
+                                    <span class="d-block ml-3 text-primary mt-1">Wallet Payment</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-flex flex-column border py-2 btn">
+                                <label class="flex-grow-1 d-flex align-items-center">
+                                    <input type="radio" class="mt-2 ml-1" name="paymentOption" value="upi" onclick="handlePaymentMethodSelection()" class="h6 mb-0 align-self-start">
+                                    <span class="d-block ml-3 mt-1 text-primary">Online Payment</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="placeOrderBtn" class="btn btn-primary btn-sm py-2 btn-block" type="submit">Proceed Payment</button>
+                </form>
+            </div>
         <% } %>
+        
 
 
 <footer id="colorlib-footer" role="contentinfo">

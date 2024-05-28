@@ -41,6 +41,63 @@
 	<script src="/js/magiczoom.js"></script>
 
 	<style>
+/* General container styling */
+.colorlib-product .container {
+    max-width: 100%;
+    padding: 0 15px;
+}
+
+/* Center elements on small screens */
+@media (max-width: 767px) {
+    .product-detail-wrap {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-detail-wrap .col-sm-8,
+    .product-detail-wrap .col-sm-4 {
+        width: 100%;
+        padding: 0;
+    }
+
+    /* Center the carousel items */
+    #product-image .item {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Center product details and align text */
+    #product-detail {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .product-desc {
+        width: 100%;
+    }
+
+    /* Center buttons */
+    .btn-addtocart {
+        margin: 5px auto;
+        display: block;
+    }
+
+    /* Center the size buttons */
+    .size-wrap {
+        justify-content: center;
+        display: flex;
+    }
+
+    .size-wrap .btn-group-toggle {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .size-btn {
+        margin: 0 5px;
+    }
+}
 
 /* ---------------------------------------------------- */
 	#product-image {

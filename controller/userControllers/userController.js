@@ -71,7 +71,6 @@ const generateotp = () => {
             specialChars: false,
             digits: true,
         });
-        console.log("Generated OTP :", otp);
         return otp;
     } catch (error) {
         console.log(error.message);
@@ -100,12 +99,11 @@ const sendmail = async (email, otp) => {
         var mailOptions = {
             from: "UrbanKicks<urbankickscompany@gmail.com>",
             to: email,
-            subject: "E-Mail Verification",
-            text: "Your OTP is: " + otp,
+            subject: "Email Verification for UrbanKicks",
+            text: "Thank you for choosing UrbanKicks! To verify your email address, please use the following OTP: " + otp,
         };
 
         await transporter.sendMail(mailOptions);
-        console.log("e-mail sent successfully")
 
     } catch (err) {
         console.log("Error in sending mail:", err);
@@ -190,13 +188,10 @@ const verifyotp = async (req, res) => {
         // Combine the digits into a single value
         const enteredotp = digit1 + digit2 + digit3 + digit4;
         const user = req.session.user;
-        console.log(enteredotp);
-        console.log(req.session.user);
         const email = req.session.user.email;
         const userdb = await otpCollection.findOne({ email: email });
         const otp = userdb.otp;
         const expiry = userdb.expiry;
-        console.log(otp);
         if (enteredotp == otp && expiry.getTime() >= Date.now()) {
             // user.isVerified = true;
             try {
@@ -293,8 +288,7 @@ const LoadForgotPassword = async(req,res)=>{
 const forgotPassword = async(req,res)=>{
     try{
         const email = req.body.email;
-        const emailExist=await userCollection.find({email})
-        console.log(email,emailExist);
+        const emailExist=await userCollection.find({email});
         if(emailExist.length === 0) {
             req.flash('emailError', 'You are not a registered user!');
             return res.redirect('/forgotpassword');

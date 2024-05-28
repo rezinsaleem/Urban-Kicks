@@ -8,11 +8,9 @@ const addtocart = async (req, res) => {
     let { size, quantity } = req.body;
     const Nquantity = parseInt(quantity, 10);
     const productId = req.params.id;
-    console.log(`Adding product ${productId} to cart with size ${size} and quantity ${quantity}`);
 
     const product = await productCollection.findOne({ _id: productId });
     if (!product) {
-      console.log(`Product with ID ${productId} not found`);
       return res.redirect('/cart');
     }
 
@@ -28,7 +26,6 @@ const addtocart = async (req, res) => {
       return item.size == size;
     });
     if (!selectedStock || selectedStock.quantity === 0) {
-      console.log(`Selected stock not available for product ${productId} and size ${size}`);
       req.flash('error',`Selected stock not available for product ${product.description} and size ${size}`)
       return res.redirect('/cart');
     }
@@ -58,7 +55,6 @@ const addtocart = async (req, res) => {
     cart.total = cart.item.reduce((acc, item) => acc + item.total, 0);
 
     await cart.save();
-    console.log(`Cart saved successfully`);
     res.redirect('/cart');
   } catch (err) {
     console.error(err);
@@ -145,10 +141,8 @@ const updateCart = async (req, res) => {
     let updatedQuantity;
 
     if (action == "1") {
-      console.log("1");
       updatedQuantity = currentQuantity + 1;
     } else if (action == "-1") {
-      console.log("-1");
       updatedQuantity = currentQuantity - 1;
     } else {
       return res.status(400).json({ success: false, error: "Invalid action" });

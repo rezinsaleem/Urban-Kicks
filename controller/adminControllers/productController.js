@@ -49,7 +49,6 @@ const addProduct = async (req, res) => {
     const category= req.body.parentCategory;
     const categories=await categoryCollection.findById(category)
     const categoryDiscount=categories.discount;
-    console.log(req.body.category,categories,categoryDiscount);
     const price = req.body.price;
     let discount = req.body.discount;
     if(categoryDiscount>discount){
@@ -189,7 +188,6 @@ const deleteImage = async (req, res) => {
       if (fs.existsSync(filename)) {
           try {
               fs.unlinkSync(filename);
-              console.log("Image deleted");
               req.flash('error',"Image deleted!")
               res.redirect("/admin/editImage/" + pid);
 
@@ -202,7 +200,6 @@ const deleteImage = async (req, res) => {
               res.status(500).send("Internal Server Error");
           }
       } else {
-          console.log("Image not found");
           req.flash("error","Image not found!")
           res.redirect("/admin/editImage/" + pid);
       }

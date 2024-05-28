@@ -35,7 +35,6 @@ const LoadCheckOut = async (req, res) => {
       const product = await productCollection.findOne({ _id: pro._id })
       const size = product.stock.findIndex(s => s.size == cartItem.size);
       if (product.stock[size].quantity < cartItem.quantity) {
-        console.log('Selected quantity exceeds available stock for productId:', product._id);
         req.flash('error', `Oops, Selected size is not in stock for the product ${product.description}`)
         return res.redirect('/cart');
       }
@@ -111,7 +110,6 @@ const order = async (req, res) => {
     if (wallet > 0) {
       const userWallet = await walletCollection.findOne({ userId: userId });
       const user = await userCollection.findOne({ _id: userId });
-      console.log(typeof user.wallet, user.wallet, typeof amount, amount)
       if (user.wallet >= amount) {
         user.wallet -= amount;
         await user.save();
@@ -124,7 +122,6 @@ const order = async (req, res) => {
         await userWallet.save()
 
       } else {
-        console.log("else", typeof amount, amount);
         userWallet.history.push({
           transaction: "Debited",
           amount: user.wallet,
@@ -182,10 +179,8 @@ const walletTransaction = async (req, res) => {
 const applyCoupon = async (req, res) => {
   try {
     const { couponCode, subtotal } = req.body;
-    console.log("total", subtotal);
     const userId = req.session.userId;
     const coupon = await couponCollection.findOne({ couponCode: couponCode });
-    console.log(coupon);
 
     if (coupon && coupon.status === true) {
       const user = await userCollection.findById(userId);
@@ -196,7 +191,6 @@ const applyCoupon = async (req, res) => {
         coupon.expiry > new Date() &&
         coupon.minimumPrice <= subtotal
       ) {
-        console.log("Coupon is valid");
         let dicprice;
         let price;
         if (coupon.type === "percentageDiscount") {
@@ -229,21 +223,17 @@ const applyCoupon = async (req, res) => {
 };
 const revokeCoupon = async (req, res) => {
   try {
-    console.log("revoke called");
     const { couponCode, subtotal } = req.body;
     const userId = req.session.userId;
     const coupon = await couponCollection.findOne({ couponCode: couponCode });
-    console.log(coupon);
 
     if (coupon) {
       const user = await userCollection.findOne({ userId: userId });
       if (coupon.expiry > new Date() && coupon.minimumPrice <= subtotal) {
-        console.log("Coupon is valid");
         const dprice = (subtotal * coupon.discount) / 100;
         const dicprice = 0;
 
         const price = subtotal;
-        console.log(price);
 
         await userCollection.findByIdAndUpdate(
           userId,

@@ -4,6 +4,49 @@
 		.light-shadow {
 			box-shadow: 0 0 5px rgba(72, 70, 70, 0.1);
 		}
+
+		@media (max-width: 767px) {
+    .process-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Hide both horizontal and vertical scroll */
+    }
+    .product-name .one-forth,
+    .product-cart .one-forth {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-bottom: 10px;
+    }
+    .product-cart .one-eight {
+        width: 100%;
+        text-align: center;
+        margin-top: 0 !important;
+    }
+    .total-wrap .total {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .total-wrap .total .grand-total {
+        width: 100%;
+        text-align: center;
+    }
+    .total-wrap .total .mt-4 {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .container.d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: center;
+    }
+    .container.d-flex.justify-content-between .row {
+        width: 100%;
+    }
+    .container.d-flex.justify-content-between .row .col-md-4 {
+        margin-bottom: 10px;
+    }
+}
+
 	</style>
 
 	<div class="colorlib-loader"></div>
@@ -91,110 +134,104 @@
 		<% if (cart && cart.item && cart.item.length> 0) { %>
 			<div class="colorlib-product">
 				<div class="container">
-					<div class="row row-pb-lg">
+					<div class="row row-pb-lg justify-content-center">
 						<div class="col-md-10 offset-md-1">
-							<div class="process-wrap">
-								<div class="process text-center active">
-									<p><span>01</span></p>
-									<h3>Shopping Cart</h3>
+								<div class="process-wrap">
+										<div class="process text-center active">
+												<p><span>01</span></p>
+												<h3>Shopping Cart</h3>
+										</div>
+										<div class="process text-center">
+												<p><span>02</span></p>
+												<h3>Checkout</h3>
+										</div>
+										<div class="process text-center">
+												<p><span>03</span></p>
+												<h3>Order Complete</h3>
+										</div>
 								</div>
-								<div class="process text-center">
-									<p><span>02</span></p>
-									<h3>Checkout</h3>
-								</div>
-								<div class="process text-center">
-									<p><span>03</span></p>
-									<h3>Order Complete</h3>
-								</div>
-							</div>
 						</div>
-					</div>
-					<div class="row row-pb-lg">
-						<div class="col-md-12">
+				</div>
+				<div class="row row-pb-lg">
+					<div class="col-md-12">
 							<div class="product-name d-flex">
-								<div class="one-forth text-left px-4">
-									<span>Product Details</span>
-								</div>
-								<div class="one-eight text-center">
-									<span>Size</span>
-								</div>
-								<div class="one-eight text-center">
-									<span>Price</span>
-								</div>
-								<div class="one-eight text-center">
-									<span>Quantity</span>
-								</div>
-								<div class="one-eight text-center">
-									<span>Total</span>
-								</div>
-								<div class="one-eight text-center px-4">
-									<span>Remove</span>
-								</div>
+									<div class="one-forth text-left px-4">
+											<span>Product Details</span>
+									</div>
+									<div class="one-eight text-center">
+											<span>Size</span>
+									</div>
+									<div class="one-eight text-center">
+											<span>Price</span>
+									</div>
+									<div class="one-eight text-center">
+											<span>Quantity</span>
+									</div>
+									<div class="one-eight text-center">
+											<span>Total</span>
+									</div>
+									<div class="one-eight text-center px-4">
+											<span>Remove</span>
+									</div>
 							</div>
 							<% cart.item.forEach(function(item,index) { %>
-								<div class="product-cart d-flex">
-									<div class="one-forth" style="margin-left: 15px;">
-										<% if(item&&item.productId){ %>
-										<a href="/shopSingle/<%= item.productId._id %>"><img src="/<%= item.productId.image[0] %>" 
-											style="height: 125px; width: 100px;"></a>
+							<div class="row product-cart"> <!-- Wrap each product cart item in its own row -->
+									<div class="col-4 one-forth" style="margin-left: 15px;">
+											<% if(item && item.productId) { %>
+											<a href="/shopSingle/<%= item.productId._id %>">
+													<img src="/<%= item.productId.image[0] %>" style="height: 125px; width: 100px;">
+											</a>
 											<div class="display-tc">
-												<h3><a href="/shopSingle/<%= item.productId._id %>">
-													<%= item?.productId?.description %>
-												</a></h3> 
-												<% } %>
-										</div>
-									</div>
-									<div class="one-eight text-center" style="margin-top: 15px;">
-										<div class="display-tc">
-											<span class="size">UK <%= item.size %></span> <!-- Size -->
-										</div>
-									</div>
-									<div class="one-eight text-center" style="margin-top: 15px;">
-										<div class="display-tc">
-											<span class="price"> ₹ <%= item.price %></span> <!-- Price -->
-										</div>
-									</div>
-
-									<div class="one-eight text-center">
-										<div class="display-tc">
-											<div class="quantity input-group" style="display: inline-block; align-items: center;">
-												<span class="input-group-btn">
-													<button
-														onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , -1, )"
-														class="btn btn-outline-dark js-btn-minus" style="border-color: #aba9a9;"
-														type="button">&minus;</button>
-												</span>
-												<input id="sst<%= index%>" type="text" class="form-control text-center mb-1 light-shadow"
-													value="<%= item.quantity %>" placeholder="" aria-label="Example text with button addon"
-													aria-describedby="button-addon1">
-												<span class="input-group-btn ml-1">
-													<button
-														onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , 1, )"
-														class="btn btn-outline-dark js-btn-plus" style="border-color: #aba9a9;"
-														type="button">&plus;</button>
-												</span>
+													<h3>
+															<a href="/shopSingle/<%= item.productId._id %>">
+																	<%= item?.productId?.description %>
+															</a>
+													</h3>
+													<% } %>
 											</div>
-										</div>
 									</div>
-
-
-									<div class="one-eight text-center" style="margin-top: 15px;">
-										<div class="display-tc">
-											<span class="price" id="total<%= index%>"> ₹ <%= item.total%></span>
-										</div>
+									<div class="col-2 one-eight text-center" style="margin-top: 15px;">
+											<div class="display-tc">
+													<span class="size">UK <%= item.size %></span>
+											</div>
 									</div>
-									<div class="one-eight text-center" style="margin-top: 15px;">
-										<div class="display-tc">
-											<a onclick="confirm('/deletcart/<%= item._id %>/<%= item.size %>')" class="btn btn-dark"
-												style="color: white; border-radius: 10px;">x</a>
-										</div>
+									<div class="col-2 one-eight text-center" style="margin-top: 15px;">
+											<div class="display-tc">
+													<span class="price"> ₹ <%= item.price %></span>
+											</div>
 									</div>
-								</div>
-								<% }); %>
-
-						</div>
+									<div class="col-2 one-eight text-center">
+											<div class="display-tc">
+													<div class="quantity input-group" style="display: inline-block; align-items: center;">
+															<span class="input-group-btn">
+																	<button onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , -1, )"
+																			class="btn btn-outline-dark js-btn-minus" style="border-color: #aba9a9;" type="button">&minus;</button>
+															</span>
+															<input id="sst<%= index%>" type="text" class="form-control text-center mb-1 light-shadow" value="<%= item.quantity %>"
+																	placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+															<span class="input-group-btn ml-1">
+																	<button onclick="updateQuantity('<%= cart._id %>','<%= item._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , 1, )"
+																			class="btn btn-outline-dark js-btn-plus" style="border-color: #aba9a9;" type="button">&plus;</button>
+															</span>
+													</div>
+											</div>
+									</div>
+									<div class="col-2 one-eight text-center" style="margin-top: 15px;">
+											<div class="display-tc">
+													<span class="price" id="total<%= index%>"> ₹ <%= item.total%></span>
+											</div>
+									</div>
+									<div class="col-2 one-eight text-center" style="margin-top: 15px;">
+											<div class="display-tc">
+													<a onclick="confirm('/deletcart/<%= item._id %>/<%= item.size %>')" class="btn btn-dark"
+															style="color: white; border-radius: 10px;">x</a>
+											</div>
+									</div>
+							</div>
+							<% }); %>
 					</div>
-				</div>
+			</div>
+			
 
 				<div class="container d-flex justify-content-between ">
 					<div class="row ">

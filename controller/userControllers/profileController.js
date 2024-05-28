@@ -79,7 +79,6 @@ const addaddress = async (req, res) => {
             if (existingAddress) {
                 const errorMessage = req.session.checkoutSave ? `${existingAddress.save_as} address already exists!` : `${existingAddress.save_as} address already exists! Use edit address..`;
                 req.flash('error', errorMessage);
-                console.log("already existing address");
                 return res.redirect(req.session.checkoutSave ? `/checkout` : `/address`);
             }
 
@@ -232,7 +231,6 @@ const ordercancelling = async (req, res) => {
         if (result.payment == 'upi' || result.payment == 'wallet') {
             const userId = req.session.userId
             const user = await userCollection.findOne({ _id: userId })
-            console.log(result.amount)
             user.wallet += parseInt(result.amount)
             await user.save()
 
@@ -468,7 +466,6 @@ const updatePassword = async (req, res) => {
         if (passwordmatch) {
             const hashedpassword = await bcrypt.hash(npass, 10)
             const newuser = await userCollection.updateOne({ _id: userId }, { password: hashedpassword })
-            console.log("password updated");
             req.flash("success", "Password updated successfully!");
             return res.redirect('/profile')
 
@@ -509,7 +506,6 @@ var instance = new Razorpay({
   });
   
 const walletupi = async (req, res) => {
-    console.log(req.body);
     var options = {
         amount: 500,
         currency: "INR",

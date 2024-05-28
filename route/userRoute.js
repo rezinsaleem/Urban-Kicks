@@ -8,6 +8,7 @@ const cartController = require('../controller/userControllers/cartController')
 const checkoutController = require('../controller/userControllers/checkoutController')
 const profileController = require('../controller/userControllers/profileController')
 const productController = require('../controller/userControllers/productController')
+const otherController = require('../controller/userControllers/otherController')
 
 
 userRouter.get('/auth/google',userController.googleAuthentication);
@@ -92,6 +93,10 @@ userRouter.post('/passwordUpdate',Auth.isLoggedUser,profileController.updatePass
 userRouter.get('/wallet',Auth.isLoggedUser, profileController.LoadWallet)
 userRouter.post('/walletcreate/orderId', profileController.walletupi)
 userRouter.post('/walletTopup', profileController.walletTopup)
+
+// static
+userRouter.get('/about', otherController.LoadAbout)
+userRouter.get('/contact', otherController.LoadContact)
 
 
 module.exports = userRouter;

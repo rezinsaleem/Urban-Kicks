@@ -27,7 +27,6 @@ const adminlogin = async(req,res)=>{
   try{
    const { email,password } = req.body;
    const admin = await userCollection.findOne({email})
-   console.log(admin)
 
    if(!admin){
     req.flash('error', 'Admin not found!')
@@ -180,7 +179,7 @@ const adLogout = (req, res) => {
 const chartData = async (req, res) => {
   try {
       const selected = req.body.selected;
-      console.log(selected);
+      
       if (selected == 'month') {
           const orderByMonth = await orderCollection.aggregate([
             {
@@ -214,8 +213,7 @@ const chartData = async (req, res) => {
                   }
               }
           ])
-          console.log('order2', orderByMonth);
-          console.log('sales2', salesByMonth);
+          
           const responseData = {
               order: orderByMonth,
               sales: salesByMonth
@@ -255,8 +253,7 @@ const chartData = async (req, res) => {
                   }
               }
           ])
-          console.log('order1', orderByYear);
-          console.log('sales1', salesByYear);
+         
           const responseData = {
               order: orderByYear,
               sales: salesByYear,
@@ -329,7 +326,7 @@ const downloadsales = async (req, res) => {
       ]);
 
 
-      console.log("sales data: ",salesData);
+      
 
       const products = await orderCollection.aggregate([
         {
@@ -374,7 +371,7 @@ const downloadsales = async (req, res) => {
             $sort: { totalSold: -1 },
         },
     ]);
-    console.log("ithu products",products);
+   
       const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
