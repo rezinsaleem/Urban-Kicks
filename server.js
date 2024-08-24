@@ -11,7 +11,8 @@ const multer = require('multer');
 const path = require('path');
 const os = require('os');
 
-const PORT = process.env.PORT
+// const PORT = process.env.PORT
+const PORT = 8000;
 
 const app = express()
 
