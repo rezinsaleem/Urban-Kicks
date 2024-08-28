@@ -43,11 +43,6 @@ userRouter.get('/resendotp',userController.resendotp)
 
 userRouter.get('/logout',userController.logout)
 
-userRouter.get('/greet',(req,res)=>{
-  res.send('<h1>Hello Rezin...!</h1>');
-})
-
-
 userRouter.get('/shop/:id', productController.LoadShop)
 userRouter.get('/shopSingle/:id', productController.shopSingle);
 userRouter.get('/addtowishlist/:id',Auth.isLoggedUser,productController.addToWish)

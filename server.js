@@ -66,6 +66,10 @@ app.use('/uploads',express.static("uploads"));
 app.use('/', userRouter)
 app.use('/admin', adminRouter)
 
+app.get('/check',(req,res)=>{
+  res.send('<h1>hellooo reziin</h1>')
+})
+
 app.listen(PORT, () => {
   console.log(`server is running on http://localhost:${PORT}`)
 })
